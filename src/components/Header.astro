@@ -1,0 +1,86 @@
+---
+import { SITE } from '../lib/site';
+
+const links = [
+  { href: '/projects/', label: 'Projects' },
+  { href: '/about/', label: 'Studio' },
+  { href: '/journal/', label: 'Journal' },
+  { href: '/contact/', label: 'Contact' },
+];
+
+const path = Astro.url.pathname;
+const isActive = (href: string) =>
+  href === '/' ? path === '/' : path.startsWith(href.replace(/\/$/, ''));
+---
+
+<header
+  class="fixed inset-x-0 top-0 z-40 border-b border-ink-900/5 bg-cream-50/90 backdrop-blur-md"
+>
+  <div class="container-x flex h-16 items-center justify-between gap-6 lg:h-20">
+    <a href="/" class="flex items-baseline gap-2" aria-label={`${SITE.name} — home`}>
+      <span class="font-display text-2xl font-semibold tracking-tight text-ink-900">
+        FORMA<span class="text-clay-600">.</span>
+      </span>
+      <span class="hidden text-[11px] font-medium tracking-[0.18em] text-ink-500 uppercase sm:inline">
+        {SITE.tagline}
+      </span>
+    </a>
+
+    <nav class="hidden items-center gap-8 md:flex" aria-label="Primary">
+      {
+        links.map((link) => (
+          <a
+            href={link.href}
+            class:list={[
+              'text-sm font-medium transition-colors hover:text-clay-600',
+              isActive(link.href) ? 'text-clay-600' : 'text-ink-700',
+            ]}
+            aria-current={isActive(link.href) ? 'page' : undefined}
+          >
+            {link.label}
+          </a>
+        ))
+      }
+      <a href="/contact/" class="btn-primary !px-5 !py-2.5">Start a project</a>
+    </nav>
+
+    <button
+      id="menu-toggle"
+      class="flex h-10 w-10 flex-col items-center justify-center gap-1.5 md:hidden"
+      aria-expanded="false"
+      aria-controls="mobile-menu"
+      aria-label="Toggle menu"
+    >
+      <span class="h-0.5 w-6 rounded bg-ink-900 transition-transform"></span>
+      <span class="h-0.5 w-6 rounded bg-ink-900 transition-opacity"></span>
+      <span class="h-0.5 w-6 rounded bg-ink-900 transition-transform"></span>
+    </button>
+  </div>
+
+  <nav
+    id="mobile-menu"
+    class="hidden border-t border-ink-900/5 bg-cream-50 px-5 py-4 md:hidden"
+    aria-label="Mobile"
+  >
+    {
+      links.map((link) => (
+        <a
+          href={link.href}
+          class="block border-b border-ink-900/5 py-3 text-base font-medium text-ink-800"
+        >
+          {link.label}
+        </a>
+      ))
+    }
+    <a href="/contact/" class="btn-primary mt-4 w-full">Start a project</a>
+  </nav>
+</header>
+
+<script>
+  const toggle = document.getElementById('menu-toggle');
+  const menu = document.getElementById('mobile-menu');
+  toggle?.addEventListener('click', () => {
+    const open = menu?.classList.toggle('hidden') === false;
+    toggle.setAttribute('aria-expanded', String(open));
+  });
+</script>

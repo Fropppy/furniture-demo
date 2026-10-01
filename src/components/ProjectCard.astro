@@ -1,0 +1,56 @@
+---
+import Placeholder from './Placeholder.astro';
+import { CATEGORIES, areaBand, type CategoryKey, type AreaBand } from '../lib/site';
+
+interface Props {
+  project: {
+    id: string;
+    data: {
+      title: string;
+      category: CategoryKey;
+      style: string;
+      location: string;
+      area: number;
+      year: number;
+      scene: any;
+      hue: number;
+      featured?: boolean;
+    };
+  };
+  eager?: boolean;
+}
+
+const { project, eager = false } = Astro.props;
+const { data } = project;
+const href = `/projects/${project.id}/`;
+---
+
+<article
+  class="group reveal"
+  data-category={data.category}
+  data-style={data.style}
+  data-band={areaBand(data.area)}
+  data-title={data.title.toLowerCase()}
+>
+  <a href={href} class="block overflow-hidden rounded-xl bg-cream-100">
+    <div class="aspect-[4/3] overflow-hidden">
+      <Placeholder
+        scene={data.scene}
+        hue={data.hue}
+        alt={`${data.title} — ${CATEGORIES[data.category]} project`}
+        class="h-full w-full transition-transform duration-500 ease-out group-hover:scale-[1.04]"
+      />
+    </div>
+  </a>
+  <div class="mt-4">
+    <p class="text-xs font-semibold tracking-[0.18em] text-clay-600 uppercase">
+      {CATEGORIES[data.category]} · {data.year}
+    </p>
+    <h3 class="mt-1.5 font-display text-xl text-ink-900">
+      <a href={href} class="transition-colors hover:text-clay-600">{data.title}</a>
+    </h3>
+    <p class="mt-1 text-sm text-ink-500">
+      {data.location} · {data.area} m² · {data.style}
+    </p>
+  </div>
+</article>

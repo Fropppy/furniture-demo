@@ -1,0 +1,23 @@
+---
+import { placeholderSvg, type Scene } from '../lib/placeholders';
+
+interface Props {
+  scene: Scene;
+  hue: number;
+  alt?: string;
+  class?: string;
+}
+
+const { scene, hue, alt = '', class: className = '' } = Astro.props;
+const uid = Math.random().toString(36).slice(2, 9);
+const svg = placeholderSvg(scene, hue, uid);
+---
+
+<svg
+  viewBox="0 0 800 600"
+  preserveAspectRatio="xMidYMid slice"
+  class={className}
+  role="img"
+  aria-label={alt}
+  set:html={svg.slice(svg.indexOf('>') + 1, svg.lastIndexOf('<'))}
+/>

@@ -1,0 +1,80 @@
+---
+import { SITE, CATEGORIES } from '../lib/site';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="bg-ink-900 text-cream-200">
+  <div class="container-x grid gap-12 py-16 sm:grid-cols-2 lg:grid-cols-4 lg:py-20">
+    <div>
+      <p class="font-display text-2xl font-semibold text-cream-50">
+        FORMA<span class="text-clay-400">.</span>
+      </p>
+      <p class="mt-4 text-sm leading-relaxed text-cream-200/70">
+        {SITE.description}
+      </p>
+      <div class="mt-6 flex gap-4 text-sm">
+        {
+          Object.entries(SITE.social).map(([name, href]) => (
+            <a
+              href={href}
+              rel="noopener"
+              target="_blank"
+              class="capitalize text-cream-200/70 transition-colors hover:text-clay-300"
+            >
+              {name}
+            </a>
+          ))
+        }
+      </div>
+    </div>
+
+    <nav aria-label="Footer">
+      <p class="text-xs font-semibold tracking-[0.2em] text-clay-300 uppercase">Explore</p>
+      <ul class="mt-5 space-y-3 text-sm">
+        <li><a class="text-cream-200/70 hover:text-cream-50" href="/projects/">All projects</a></li>
+        <li><a class="text-cream-200/70 hover:text-cream-50" href="/about/">Studio</a></li>
+        <li><a class="text-cream-200/70 hover:text-cream-50" href="/journal/">Journal</a></li>
+        <li><a class="text-cream-200/70 hover:text-cream-50" href="/contact/">Contact</a></li>
+      </ul>
+    </nav>
+
+    <nav aria-label="Practice areas">
+      <p class="text-xs font-semibold tracking-[0.2em] text-clay-300 uppercase">Practice</p>
+      <ul class="mt-5 space-y-3 text-sm">
+        {
+          Object.entries(CATEGORIES).map(([key, label]) => (
+            <li>
+              <a class="text-cream-200/70 hover:text-cream-50" href={`/projects/?category=${key}`}>
+                {label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div>
+      <p class="text-xs font-semibold tracking-[0.2em] text-clay-300 uppercase">Contact</p>
+      <ul class="mt-5 space-y-3 text-sm text-cream-200/70">
+        <li>{SITE.address}</li>
+        <li>
+          <a class="hover:text-cream-50" href={`tel:${SITE.phone.replace(/\s/g, '')}`}>{SITE.phone}</a>
+        </li>
+        <li>
+          <a class="hover:text-cream-50" href={`mailto:${SITE.email}`}>{SITE.email}</a>
+        </li>
+        <li>Mon – Sat, 8:30 – 18:00</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="border-t border-cream-50/10">
+    <div
+      class="container-x flex flex-col items-center justify-between gap-3 py-6 text-xs text-cream-200/50 sm:flex-row"
+    >
+      <p>© {year} {SITE.name}. All rights reserved.</p>
+      <p>Interior · Furniture · Design–Build</p>
+    </div>
+  </div>
+</footer>
