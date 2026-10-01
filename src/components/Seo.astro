@@ -1,5 +1,5 @@
 ---
-import { SITE } from '../lib/site';
+import { SITE, withBase } from '../lib/site';
 
 interface Props {
   title: string;
@@ -48,5 +48,5 @@ const orgSchema = {
 <meta name="twitter:title" content={fullTitle} />
 <meta name="twitter:description" content={description} />
 
-<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="icon" type="image/svg+xml" href={withBase('/favicon.svg')} />
 <script type="application/ld+json" set:html={JSON.stringify(orgSchema)} />

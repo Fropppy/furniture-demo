@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import { withBase } from '../lib/site';
 ---
 
 <Base title="Page not found" noIndex>
@@ -12,7 +13,7 @@ import Base from '../layouts/Base.astro';
       <p class="mt-4 text-ink-600">
         The page you're looking for doesn't exist — but plenty of finished rooms do.
       </p>
-      <a href="/projects/" class="btn-primary mt-8">Browse projects</a>
+      <a href={withBase('/projects/')} class="btn-primary mt-8">Browse projects</a>
     </div>
   </section>
 </Base>

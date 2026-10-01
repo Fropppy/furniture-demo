@@ -1,6 +1,6 @@
 ---
 import Placeholder from './Placeholder.astro';
-import { CATEGORIES, areaBand, type CategoryKey, type AreaBand } from '../lib/site';
+import { CATEGORIES, areaBand, withBase, type CategoryKey, type AreaBand } from '../lib/site';
 
 interface Props {
   project: {
@@ -22,7 +22,7 @@ interface Props {
 
 const { project, eager = false } = Astro.props;
 const { data } = project;
-const href = `/projects/${project.id}/`;
+const href = withBase(`/projects/${project.id}/`);
 ---
 
 <article

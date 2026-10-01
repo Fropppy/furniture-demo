@@ -1,5 +1,5 @@
 ---
-import { SITE, CATEGORIES } from '../lib/site';
+import { SITE, CATEGORIES, withBase } from '../lib/site';
 
 const year = new Date().getFullYear();
 ---
@@ -32,10 +32,10 @@ const year = new Date().getFullYear();
     <nav aria-label="Footer">
       <p class="text-xs font-semibold tracking-[0.2em] text-clay-300 uppercase">Explore</p>
       <ul class="mt-5 space-y-3 text-sm">
-        <li><a class="text-cream-200/70 hover:text-cream-50" href="/projects/">All projects</a></li>
-        <li><a class="text-cream-200/70 hover:text-cream-50" href="/about/">Studio</a></li>
-        <li><a class="text-cream-200/70 hover:text-cream-50" href="/journal/">Journal</a></li>
-        <li><a class="text-cream-200/70 hover:text-cream-50" href="/contact/">Contact</a></li>
+        <li><a class="text-cream-200/70 hover:text-cream-50" href={withBase('/projects/')}>All projects</a></li>
+        <li><a class="text-cream-200/70 hover:text-cream-50" href={withBase('/about/')}>Studio</a></li>
+        <li><a class="text-cream-200/70 hover:text-cream-50" href={withBase('/journal/')}>Journal</a></li>
+        <li><a class="text-cream-200/70 hover:text-cream-50" href={withBase('/contact/')}>Contact</a></li>
       </ul>
     </nav>
 
@@ -45,7 +45,7 @@ const year = new Date().getFullYear();
         {
           Object.entries(CATEGORIES).map(([key, label]) => (
             <li>
-              <a class="text-cream-200/70 hover:text-cream-50" href={`/projects/?category=${key}`}>
+              <a class="text-cream-200/70 hover:text-cream-50" href={withBase(`/projects/?category=${key}`)}>
                 {label}
               </a>
             </li>

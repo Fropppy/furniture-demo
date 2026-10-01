@@ -1,7 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import Placeholder from '../components/Placeholder.astro';
-import { SITE } from '../lib/site';
+import { SITE, withBase } from '../lib/site';
 
 const values = [
   { title: 'Honest materials', text: 'We specify what we can stand behind — real timbers, traceable stone, fabrics that age well in this climate.' },
@@ -90,8 +90,8 @@ const values = [
         bring us a site.
       </p>
       <div class="mt-8 flex justify-center gap-4">
-        <a href="/projects/" class="btn-primary">View projects</a>
-        <a href="/contact/" class="btn-ghost">Contact us</a>
+        <a href={withBase('/projects/')} class="btn-primary">View projects</a>
+        <a href={withBase('/contact/')} class="btn-ghost">Contact us</a>
       </div>
     </div>
   </section>

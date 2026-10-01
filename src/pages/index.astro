@@ -3,7 +3,7 @@ import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import Placeholder from '../components/Placeholder.astro';
 import ProjectCard from '../components/ProjectCard.astro';
-import { CATEGORIES, SITE } from '../lib/site';
+import { CATEGORIES, SITE, withBase } from '../lib/site';
 
 const projects = (await getCollection('projects')).sort(
   (a, b) => a.data.order - b.data.order,
@@ -72,7 +72,7 @@ const stats = [
                 <p class="mt-3 text-sm text-cream-200/85 sm:text-base">
                   {p.data.location} · {p.data.area} m² · {p.data.style}
                 </p>
-                <a href={`/projects/${p.id}/`} class="btn-light mt-7">
+                <a href={withBase(`/projects/${p.id}/`)} class="btn-light mt-7">
                   View project
                 </a>
               </div>
@@ -110,7 +110,7 @@ const stats = [
             Projects we're proud to sign
           </h2>
         </div>
-        <a href="/projects/" class="btn-ghost reveal">All projects →</a>
+        <a href={withBase('/projects/')} class="btn-ghost reveal">All projects →</a>
       </div>
 
       <div class="mt-10 flex flex-wrap gap-2 reveal" role="tablist" aria-label="Filter by category">
@@ -189,12 +189,12 @@ const stats = [
           <p class="eyebrow">Journal</p>
           <h2 class="mt-3 font-display text-3xl text-ink-900 sm:text-4xl">Notes from the studio</h2>
         </div>
-        <a href="/journal/" class="btn-ghost reveal">All articles →</a>
+        <a href={withBase('/journal/')} class="btn-ghost reveal">All articles →</a>
       </div>
       <div class="mt-12 grid gap-8 sm:grid-cols-3">
         {
           posts.slice(0, 3).map((post, i) => (
-            <a href={`/journal/${post.id}/`} class="reveal group" style={`--reveal-delay:${i * 80}ms`}>
+              <a href={withBase(`/journal/${post.id}/`)} class="reveal group" style={`--reveal-delay:${i * 80}ms`}>
               <p class="text-xs font-semibold tracking-[0.18em] text-clay-600 uppercase">
                 {post.data.tag} · {post.data.date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
               </p>
@@ -219,7 +219,7 @@ const stats = [
         Tell us about the site, the budget and the timeline. We'll tell you honestly what's
         possible — usually within two working days.
       </p>
-      <a href="/contact/" class="btn-primary mt-8">Start a project</a>
+      <a href={withBase('/contact/')} class="btn-primary mt-8">Start a project</a>
     </div>
   </section>
 </Base>

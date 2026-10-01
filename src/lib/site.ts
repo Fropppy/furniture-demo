@@ -17,6 +17,14 @@ export const SITE = {
   },
 };
 
+/**
+ * Prefix an internal path with the configured deploy base so the site works
+ * both at a domain root (Vercel) and under /repo/ (GitHub Pages).
+ */
+export function withBase(path: string): string {
+  return import.meta.env.BASE_URL.replace(/\/$/, '') + path;
+}
+
 export const CATEGORIES = {
   residential: 'Residential',
   hospitality: 'Hospitality',

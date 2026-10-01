@@ -1,23 +1,24 @@
 ---
-import { SITE } from '../lib/site';
+import { SITE, withBase } from '../lib/site';
 
 const links = [
-  { href: '/projects/', label: 'Projects' },
-  { href: '/about/', label: 'Studio' },
-  { href: '/journal/', label: 'Journal' },
-  { href: '/contact/', label: 'Contact' },
+  { href: withBase('/projects/'), label: 'Projects' },
+  { href: withBase('/about/'), label: 'Studio' },
+  { href: withBase('/journal/'), label: 'Journal' },
+  { href: withBase('/contact/'), label: 'Contact' },
 ];
 
 const path = Astro.url.pathname;
+const homeHref = withBase('/');
 const isActive = (href: string) =>
-  href === '/' ? path === '/' : path.startsWith(href.replace(/\/$/, ''));
+  href === homeHref ? path === homeHref : path.startsWith(href.replace(/\/$/, ''));
 ---
 
 <header
   class="fixed inset-x-0 top-0 z-40 border-b border-ink-900/5 bg-cream-50/90 backdrop-blur-md"
 >
   <div class="container-x flex h-16 items-center justify-between gap-6 lg:h-20">
-    <a href="/" class="flex items-baseline gap-2" aria-label={`${SITE.name} — home`}>
+    <a href={homeHref} class="flex items-baseline gap-2" aria-label={`${SITE.name} — home`}>
       <span class="font-display text-2xl font-semibold tracking-tight text-ink-900">
         FORMA<span class="text-clay-600">.</span>
       </span>
@@ -41,7 +42,7 @@ const isActive = (href: string) =>
           </a>
         ))
       }
-      <a href="/contact/" class="btn-primary !px-5 !py-2.5">Start a project</a>
+      <a href={withBase('/contact/')} class="btn-primary !px-5 !py-2.5">Start a project</a>
     </nav>
 
     <button
@@ -72,7 +73,7 @@ const isActive = (href: string) =>
         </a>
       ))
     }
-    <a href="/contact/" class="btn-primary mt-4 w-full">Start a project</a>
+    <a href={withBase('/contact/')} class="btn-primary mt-4 w-full">Start a project</a>
   </nav>
 </header>
 
