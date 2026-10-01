@@ -1,7 +1,7 @@
 ---
 title: Studio notes — setting up our material library
 excerpt: Every material we specify now lives in one physical and digital library. The rules we set ourselves to keep it honest.
-date: 2025-03-21
+date: '2025-03-21'
 tag: Studio
 ---
 

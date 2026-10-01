@@ -12,6 +12,7 @@ faster stack.
 | Frontend   | jQuery, Bootstrap, Slick, WOW  | Zero-JS by default + small vanilla islands      |
 | Styling    | Bootstrap + custom CSS         | **Tailwind CSS 4** design tokens                |
 | Lightbox   | Fancybox                       | **PhotoSwipe 5** (free for commercial use)      |
+| CMS        | October CMS admin              | **Keystatic** (git-based, free) at `/keystatic` |
 | Sliders    | Slick                          | **Swiper 11**                                   |
 | Fonts      | Google Fonts CDN               | Self-hosted via Fontsource (no 3rd-party calls) |
 | Images     | Manual WebP + lazy             | SVG placeholder system now; Astro image pipeline for photos |
@@ -43,8 +44,37 @@ src/
 │   ├── site.ts           # ← brand name, contacts, categories, area bands
 │   └── placeholders.ts   # SVG line-art scenes (8 room types × any hue)
 ├── styles/global.css     # Tailwind theme tokens (cream/clay/ink palette)
-└── pages/                # / /projects/ /projects/[slug] /about /contact /journal
+├── scripts/make-og.mjs   # regenerates public/og-default.png (`npm run og`)
+├── keystatic.config.ts   # CMS form definitions (keep in sync with content.config.ts)
+└── pages/                # / /projects/ /projects/[slug] /about /contact /journal /rss.xml
 ```
+
+## Editing content — Keystatic CMS
+
+Non-developers edit everything through a form UI instead of touching markdown:
+
+```bash
+npm run dev          # then open http://localhost:4321/keystatic
+```
+
+- **Local mode (current):** edits write straight to `src/content/…` in your working
+  tree — review with `git diff` and commit as usual.
+- **Client editing:** switch `storage` to `{ kind: 'cloud' }` in `keystatic.config.ts`
+  and connect a project at [keystatic.cloud](https://keystatic.cloud) (free for up to
+  3 users). The admin UI then must be deployed with an SSR adapter: install
+  `@astrojs/vercel`, add it to `integrations`, build with `ENABLE_KEYSTATIC=1`.
+  Static deploys (GitHub Pages) automatically exclude the admin — by design.
+- The admin path is `/keystatic` (hardcoded by the integration).
+- `keystatic.config.ts` mirrors `src/content.config.ts` — new frontmatter fields go
+  in **both** files.
+
+## SEO features built in
+
+Per-page titles/descriptions with editor overrides (`seoTitle`/`seoDescription`
+frontmatter — blank falls back to the content), canonical URLs, OpenGraph + Twitter
+cards with a generated default share image (`npm run og`), `max-image-preview:large`,
+Organization / BreadcrumbList / CreativeWork / Article JSON-LD, sitemap (RSS excluded),
+`robots.txt`, and an RSS feed at `/rss.xml`.
 
 ## Adding a project
 
@@ -66,7 +96,11 @@ hue: 150                # 0–360 tint so the grid stays varied but cohesive
 gallery: [living, dining, bedroom]
 featured: true          # puts it in the home hero slider
 order: 1                # sort order
+seoTitle: …             # optional — overrides the page <title> (keep ≤ 60 chars)
+seoDescription: …       # optional — overrides the meta description (~155 chars)
 ---
+
+(Easiest way: run `npm run dev` and add it through `/keystatic`.)
 
 ## The brief
 Markdown write-up shown on the project page.
@@ -118,5 +152,5 @@ Note: Vercel's free Hobby plan restricts commercial use — fine for a demo, use
 
 - VI/EN i18n routing (`astro:i18n`)
 - Investment / break-even calculators (the reference's lead magnets)
-- Decap or Sveltia CMS on top of the git-based content for non-dev editing
+- Real project photography via `astro:assets`
 - Dynamic lead widgets (Zalo, Messenger, WhatsApp float)

@@ -1,7 +1,7 @@
 ---
 title: What we learned building furniture for 40 cafés
 excerpt: Repetition teaches you things one-off projects never will — here are the details we now bake into every hospitality fit-out.
-date: 2025-08-12
+date: '2025-08-12'
 tag: Practice
 ---
 

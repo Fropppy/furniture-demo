@@ -1,7 +1,7 @@
 ---
 title: Material matters — choosing timber for Vietnam's climate
 excerpt: Teak, ash, oak or engineered board? A practical guide to specifying wood that stays flat and honest from Hanoi's humidity to Saigon's heat.
-date: 2025-06-03
+date: '2025-06-03'
 tag: Materials
 ---
 

@@ -62,7 +62,10 @@ const workSchema = {
 };
 ---
 
-<Base title={data.title} description={data.summary}>
+<Base
+  title={data.seoTitle ?? data.title}
+  description={data.seoDescription ?? data.summary}
+>
   <script type="application/ld+json" set:html={JSON.stringify(breadcrumb)} slot="seo" />
   <script type="application/ld+json" set:html={JSON.stringify(workSchema)} slot="seo" />
 

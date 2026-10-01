@@ -12,6 +12,17 @@ const scenes = z.enum([
   'facade',
 ]);
 
+// Editor-facing SEO overrides: blank/whitespace values normalize to undefined
+// so the page fallback (title/summary) always wins when the field is empty.
+const seoTitle = z.preprocess(
+  (v) => (typeof v === 'string' && v.trim() ? v.trim() : undefined),
+  z.string().max(80).optional(),
+);
+const seoDescription = z.preprocess(
+  (v) => (typeof v === 'string' && v.trim() ? v.trim() : undefined),
+  z.string().max(200).optional(),
+);
+
 const projects = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/projects' }),
   schema: z.object({
@@ -30,6 +41,8 @@ const projects = defineCollection({
     gallery: z.array(scenes).default([]),
     featured: z.boolean().default(false),
     order: z.number().default(99),
+    seoTitle,
+    seoDescription,
   }),
 });
 
@@ -40,6 +53,8 @@ const posts = defineCollection({
     excerpt: z.string(),
     date: z.coerce.date(),
     tag: z.string().default('Journal'),
+    seoTitle,
+    seoDescription,
   }),
 });
 
