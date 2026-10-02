@@ -8,7 +8,7 @@ faster stack.
 
 | Layer      | KenDesign (reference)          | This project                                    |
 | ---------- | ------------------------------ | ----------------------------------------------- |
-| Backend    | October CMS (Laravel), PHP 7.2 | None at runtime — **Astro 5** static build      |
+| Backend    | October CMS (Laravel), PHP 7.2 | None at runtime — **Astro 7** static build      |
 | Frontend   | jQuery, Bootstrap, Slick, WOW  | Zero-JS by default + small vanilla islands      |
 | Styling    | Bootstrap + custom CSS         | **Tailwind CSS 4** design tokens                |
 | Lightbox   | Fancybox                       | **PhotoSwipe 5** (free for commercial use)      |
