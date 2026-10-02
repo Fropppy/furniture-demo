@@ -42,7 +42,7 @@ const isActive = (href: string) =>
           </a>
         ))
       }
-      <a href={withBase('/contact/')} class="btn-primary !px-5 !py-2.5">Start a project</a>
+      <a href={withBase('/contact/')} class="btn-primary px-5! py-2.5!">Start a project</a>
     </nav>
 
     <button
@@ -68,6 +68,7 @@ const isActive = (href: string) =>
         <a
           href={link.href}
           class="block border-b border-ink-900/5 py-3 text-base font-medium text-ink-800"
+          aria-current={isActive(link.href) ? 'page' : undefined}
         >
           {link.label}
         </a>
@@ -80,8 +81,17 @@ const isActive = (href: string) =>
 <script>
   const toggle = document.getElementById('menu-toggle');
   const menu = document.getElementById('mobile-menu');
+  const setOpen = (open: boolean) => {
+    menu?.classList.toggle('hidden', !open);
+    toggle?.setAttribute('aria-expanded', String(open));
+  };
   toggle?.addEventListener('click', () => {
-    const open = menu?.classList.toggle('hidden') === false;
-    toggle.setAttribute('aria-expanded', String(open));
+    setOpen(menu?.classList.contains('hidden') ?? false);
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && menu && !menu.classList.contains('hidden')) {
+      setOpen(false);
+      toggle?.focus();
+    }
   });
 </script>

@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
 import Placeholder from '../components/Placeholder.astro';
 import { SITE, withBase } from '../lib/site';
 
@@ -15,18 +16,11 @@ const values = [
   title="Studio"
   description="FORMA Studio is an interior and furniture design practice in Vietnam — designers, joiners and site supervisors working as one team."
 >
-  <section class="border-b border-ink-900/8 bg-cream-100">
-    <div class="container-x py-14 lg:py-20">
-      <p class="eyebrow reveal">The studio</p>
-      <h1 class="reveal mt-3 max-w-3xl font-display text-4xl text-ink-900 sm:text-5xl lg:text-6xl">
-        Designers and makers, one team
-      </h1>
-      <p class="reveal mt-5 max-w-2xl text-lg text-ink-600">
-        We are a {SITE.tagline.toLowerCase()} practice: thirty designers, joiners and site
-        supervisors who take spaces from first sketch to the last cushion.
-      </p>
-    </div>
-  </section>
+  <PageHeader
+    eyebrow="The studio"
+    title="Designers and makers, one team"
+    lede={`We are a ${SITE.tagline.toLowerCase()} practice: thirty designers, joiners and site supervisors who take spaces from first sketch to the last cushion.`}
+  />
 
   <section class="py-16 lg:py-24">
     <div class="container-x grid items-center gap-12 lg:grid-cols-2">

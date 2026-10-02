@@ -1,4 +1,5 @@
 import { config, fields, collection, type KeystaticConfig } from '@keystatic/core';
+import { STYLE_TAGS } from './src/lib/site';
 
 /**
  * This mirrors the Zod schemas in src/content.config.ts — keep them in sync.
@@ -45,14 +46,8 @@ const projects = collection({
     }),
     style: fields.select({
       label: 'Style',
-      options: [
-        { label: 'Japandi', value: 'Japandi' },
-        { label: 'Modern Tropical', value: 'Modern Tropical' },
-        { label: 'Minimalist', value: 'Minimalist' },
-        { label: 'Contemporary Classic', value: 'Contemporary Classic' },
-        { label: 'Industrial', value: 'Industrial' },
-        { label: 'Modern Luxury', value: 'Modern Luxury' },
-      ],
+      // Single source of truth with the zod schema (content.config.ts).
+      options: STYLE_TAGS.map((s) => ({ label: s, value: s })),
       defaultValue: 'Minimalist',
     }),
     location: fields.text({ label: 'Location', validation: { isRequired: true } }),
@@ -90,7 +85,7 @@ const projects = collection({
     order: fields.integer({ label: 'Sort order', defaultValue: 99 }),
     seoTitle: fields.text({
       label: 'SEO title override (≤ 60 chars)',
-      validation: { length: { max: 70 } },
+      validation: { length: { max: 60 } },
     }),
     seoDescription: fields.text({
       label: 'SEO meta description override (~150–160 chars)',
@@ -122,7 +117,7 @@ const posts = collection({
     tag: fields.text({ label: 'Tag', defaultValue: 'Journal' }),
     seoTitle: fields.text({
       label: 'SEO title override (≤ 60 chars)',
-      validation: { length: { max: 70 } },
+      validation: { length: { max: 60 } },
     }),
     seoDescription: fields.text({
       label: 'SEO meta description override (~150–160 chars)',

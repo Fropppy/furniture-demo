@@ -1,7 +1,20 @@
 // Generates public/og-default.png (1200×630) — the default social share card.
 // Run once after brand changes:  npm run og
+// NOTE: the BRAND block below mirrors src/lib/site.ts. TS cannot be imported
+// from this .mjs script — keep the two in sync when the brand changes.
 import sharp from 'sharp';
 import { fileURLToPath } from 'node:url';
+
+const BRAND = {
+  name: 'FORMA',
+  accent: '.',
+  tagline: 'INTERIOR &amp; FURNITURE DESIGN', // pre-escaped for SVG XML (& = &amp;)
+  line1: 'Homes · Cafés · Workspaces · Retail',
+  line2: 'Concept — Joinery — Turnkey fit-out',
+  ink: '#1c1917',
+  clay: '#b45f3f',
+  muted: '#57534e',
+};
 
 const svg = `<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
   <defs>
@@ -27,11 +40,11 @@ const svg = `<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
 
   <!-- brand block, left -->
   <g font-family="Lato, sans-serif">
-    <text x="110" y="240" font-size="108" font-weight="700" fill="#1c1917">FORMA<tspan fill="#b45f3f">.</tspan></text>
-    <text x="112" y="308" font-size="40" letter-spacing="6" fill="#57534e">INTERIOR &amp; FURNITURE DESIGN</text>
-    <rect x="112" y="352" width="120" height="8" fill="#b45f3f"/>
-    <text x="112" y="430" font-size="30" fill="#78716c">Homes · Cafés · Workspaces · Retail</text>
-    <text x="112" y="478" font-size="30" fill="#78716c">Concept — Joinery — Turnkey fit-out</text>
+    <text x="110" y="240" font-size="108" font-weight="700" fill="${BRAND.ink}">${BRAND.name}<tspan fill="${BRAND.clay}">${BRAND.accent}</tspan></text>
+    <text x="112" y="308" font-size="40" letter-spacing="6" fill="${BRAND.muted}">${BRAND.tagline}</text>
+    <rect x="112" y="352" width="120" height="8" fill="${BRAND.clay}"/>
+    <text x="112" y="430" font-size="30" fill="#78716c">${BRAND.line1}</text>
+    <text x="112" y="478" font-size="30" fill="#78716c">${BRAND.line2}</text>
   </g>
 </svg>
 `;

@@ -4,7 +4,7 @@ import Base from '../../layouts/Base.astro';
 import Placeholder from '../../components/Placeholder.astro';
 import ProjectCard from '../../components/ProjectCard.astro';
 import { placeholderDataUri } from '../../lib/placeholders';
-import { CATEGORIES, SITE, withBase } from '../../lib/site';
+import { CATEGORIES, SITE, safeJson, withBase } from '../../lib/site';
 
 export async function getStaticPaths() {
   const projects = (await getCollection('projects')).sort(
@@ -66,8 +66,8 @@ const workSchema = {
   title={data.seoTitle ?? data.title}
   description={data.seoDescription ?? data.summary}
 >
-  <script type="application/ld+json" set:html={JSON.stringify(breadcrumb)} slot="seo" />
-  <script type="application/ld+json" set:html={JSON.stringify(workSchema)} slot="seo" />
+  <script type="application/ld+json" set:html={safeJson(breadcrumb)} slot="seo" />
+  <script type="application/ld+json" set:html={safeJson(workSchema)} slot="seo" />
 
   <article class="py-12 lg:py-16">
     <div class="container-x">
@@ -132,7 +132,7 @@ const workSchema = {
             ))
           }
         </div>
-        <p class="mt-4 text-center text-xs text-ink-400">
+        <p class="mt-4 text-center text-xs text-ink-500">
           Placeholder illustrations — click any image to open the lightbox. Real project
           photography drops into the same slots.
         </p>

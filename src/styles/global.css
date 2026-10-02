@@ -116,24 +116,36 @@ body {
 }
 
 /* ---- Hero slider pagination ---- */
+/* Bullets render as <button> (bulletElement) — 24px hit target (WCAG 2.5.8)
+   with an 8px visible dot via background-clip: content-box. */
 .hero-pagination {
   position: absolute;
   right: 1.5rem;
   bottom: 2rem;
   z-index: 10;
   display: flex;
-  gap: 8px;
+  gap: 2px;
 }
-.hero-pagination .swiper-pagination-bullet {
+.hero-pagination button.swiper-pagination-bullet {
   margin: 0 !important;
-  width: 8px;
-  height: 8px;
+  width: 24px;
+  height: 24px;
+  padding: 8px;
+  border: 0;
   border-radius: 9999px;
-  background: rgba(253, 251, 247, 0.45);
+  background-color: rgba(253, 251, 247, 0.45);
+  background-clip: content-box;
   opacity: 1;
-  transition: all 0.3s ease;
+  cursor: pointer;
+  transition:
+    background-color 0.3s ease,
+    width 0.3s ease;
 }
-.hero-pagination .swiper-pagination-bullet-active {
-  width: 26px;
-  background: #fdfbf7;
+.hero-pagination button.swiper-pagination-bullet-active {
+  width: 42px;
+  background-color: #fdfbf7;
+}
+.hero-pagination button.swiper-pagination-bullet:focus-visible {
+  outline: 2px solid #fdfbf7;
+  outline-offset: 2px;
 }

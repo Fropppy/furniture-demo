@@ -1,22 +1,10 @@
 ---
+import type { CollectionEntry } from 'astro:content';
 import Placeholder from './Placeholder.astro';
-import { CATEGORIES, areaBand, withBase, type CategoryKey } from '../lib/site';
+import { CATEGORIES, areaBand, withBase } from '../lib/site';
 
 interface Props {
-  project: {
-    id: string;
-    data: {
-      title: string;
-      category: CategoryKey;
-      style: string;
-      location: string;
-      area: number;
-      year: number;
-      scene: any;
-      hue: number;
-      featured?: boolean;
-    };
-  };
+  project: CollectionEntry<'projects'>;
 }
 
 const { project } = Astro.props;

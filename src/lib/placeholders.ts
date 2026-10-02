@@ -91,7 +91,7 @@ export function placeholderSvg(scene: Scene, hue: number, uid: string): string {
           g('<line x1="580" y1="150" x2="730" y2="150"/><rect x="596" y="118" width="24" height="32" rx="4"/><rect x="636" y="110" width="24" height="40" rx="4"/><rect x="676" y="124" width="24" height="26" rx="4"/>') +
           // island + stools
           g('<rect x="286" y="396" width="240" height="52" rx="10"/>') +
-          g('<circle cx="330" cy="470" r="14" fill="${softer}"/><line x1="330" y1="484" x2="330" y2="500"/><circle cx="480" cy="470" r="14" fill="${softer}"/><line x1="480" y1="484" x2="480" y2="500"/>'),
+          g(`<circle cx="330" cy="470" r="14" fill="${softer}"/><line x1="330" y1="484" x2="330" y2="500"/><circle cx="480" cy="470" r="14" fill="${softer}"/><line x1="480" y1="484" x2="480" y2="500"/>`),
       );
     case 'dining':
       return open(
@@ -105,14 +105,14 @@ export function placeholderSvg(scene: Scene, hue: number, uid: string): string {
           g('<rect x="150" y="306" width="18" height="70" rx="8"/><rect x="128" y="366" width="74" height="16" rx="8"/><line x1="140" y1="382" x2="140" y2="446"/><line x1="190" y1="382" x2="190" y2="446"/>') +
           g('<rect x="632" y="306" width="18" height="70" rx="8"/><rect x="598" y="366" width="74" height="16" rx="8"/><line x1="610" y1="382" x2="610" y2="446"/><line x1="660" y1="382" x2="660" y2="446"/>') +
           // sideboard
-          g('<rect x="600" y="250" width="150" height="0"/><rect x="604" y="256" width="140" height="70" rx="8" opacity="0"/>') +
+          g('<rect x="604" y="256" width="140" height="70" rx="8"/>') +
           // rug
           `<rect x="230" y="468" width="340" height="22" rx="11" fill="${softer}" stroke="none"/>`,
       );
     case 'office':
       return open(
         // shelf
-        g('<rect x="92" y="96" width="150" height="170" rx="6"/><line x1="92" y1="152" x2="242" y2="152"/><line x1="92" y1="208" x2="242" y2="208"/><rect x="106" y="122" width="14" height="30" fill="${softer}"/><rect x="124" y="116" width="14" height="36" fill="${softer}"/><rect x="160" y="180" width="14" height="28" fill="${softer}"/><rect x="178" y="176" width="14" height="32" fill="${softer}"/>') +
+        g(`<rect x="92" y="96" width="150" height="170" rx="6"/><line x1="92" y1="152" x2="242" y2="152"/><line x1="92" y1="208" x2="242" y2="208"/><rect x="106" y="122" width="14" height="30" fill="${softer}"/><rect x="124" y="116" width="14" height="36" fill="${softer}"/><rect x="160" y="180" width="14" height="28" fill="${softer}"/><rect x="178" y="176" width="14" height="32" fill="${softer}"/>`) +
           // window
           g('<rect x="560" y="90" width="160" height="200" rx="6"/><line x1="640" y1="90" x2="640" y2="290"/>') +
           // desk + monitor
@@ -134,7 +134,7 @@ export function placeholderSvg(scene: Scene, hue: number, uid: string): string {
           g('<rect x="228" y="262" width="104" height="54" rx="8"/><line x1="256" y1="316" x2="256" y2="300"/><line x1="304" y1="316" x2="304" y2="300"/>') +
           g('<path d="M510 296 h34 v20 c0 10 -34 10 -34 0 z"/><path d="M544 300 c14 0 14 14 0 14" fill="none"/>') +
           // stools
-          g('<circle cx="250" cy="462" r="15" fill="${softer}"/><line x1="250" y1="477" x2="250" y2="494"/><circle cx="420" cy="462" r="15" fill="${softer}"/><line x1="420" y1="477" x2="420" y2="494"/>') +
+          g(`<circle cx="250" cy="462" r="15" fill="${softer}"/><line x1="250" y1="477" x2="250" y2="494"/><circle cx="420" cy="462" r="15" fill="${softer}"/><line x1="420" y1="477" x2="420" y2="494"/>`) +
           // plant
           g('<path d="M640 402 h42 l-6 44 h-30 z"/><path d="M661 402 c-24 -28 -18 -58 2 -74 c20 16 26 46 -2 74 z"/>'),
       );
@@ -149,7 +149,7 @@ export function placeholderSvg(scene: Scene, hue: number, uid: string): string {
           // glass on bar
           g('<path d="M300 268 l20 34 h-40 z" fill="none"/><line x1="320" y1="302" x2="320" y2="318"/>') +
           // stools
-          g('<circle cx="220" cy="462" r="15" fill="${softer}"/><line x1="220" y1="477" x2="220" y2="494"/><circle cx="350" cy="462" r="15" fill="${softer}"/><line x1="350" y1="477" x2="350" y2="494"/><circle cx="480" cy="462" r="15" fill="${softer}"/><line x1="480" y1="477" x2="480" y2="494"/>'),
+          g(`<circle cx="220" cy="462" r="15" fill="${softer}"/><line x1="220" y1="477" x2="220" y2="494"/><circle cx="350" cy="462" r="15" fill="${softer}"/><line x1="350" y1="477" x2="350" y2="494"/><circle cx="480" cy="462" r="15" fill="${softer}"/><line x1="480" y1="477" x2="480" y2="494"/>`),
       );
     case 'facade':
       return open(
@@ -158,7 +158,7 @@ export function placeholderSvg(scene: Scene, hue: number, uid: string): string {
           // awning scallops
           `<path d="M130 200 q34 30 67.5 0 q34 30 67.5 0 q34 30 67.5 0 q34 30 67.5 0 q34 30 67.5 0 q34 30 67.5 0 q34 30 67.5 0 q34 30 67.5 0" fill="none"/>` +
           // windows + door
-          g('<rect x="164" y="252" width="150" height="200" rx="6"/><line x1="239" y1="252" x2="239" y2="452"/><line x1="486" y1="252" x2="486" y2="452" opacity="0"/><rect x="486" y="252" width="150" height="200" rx="6"/><line x1="561" y1="252" x2="561" y2="452"/><rect x="352" y="286" width="96" height="166" rx="4"/><circle cx="432" cy="372" r="4"/>') +
+          g('<rect x="164" y="252" width="150" height="200" rx="6"/><line x1="239" y1="252" x2="239" y2="452"/><rect x="486" y="252" width="150" height="200" rx="6"/><line x1="561" y1="252" x2="561" y2="452"/><rect x="352" y="286" width="96" height="166" rx="4"/><circle cx="432" cy="372" r="4"/>') +
           // planters
           g('<rect x="120" y="410" width="70" height="42" rx="8"/><path d="M155 410 c-18 -22 -12 -44 0 -56 c12 12 18 34 0 56 z"/><rect x="610" y="410" width="70" height="42" rx="8"/><path d="M645 410 c-18 -22 -12 -44 0 -56 c12 12 18 34 0 56 z"/>') +
           // ground

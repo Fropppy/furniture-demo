@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
+import PageHeader from '../../components/PageHeader.astro';
 import ProjectCard from '../../components/ProjectCard.astro';
 import { CATEGORIES, STYLE_TAGS, AREA_BANDS } from '../../lib/site';
 
@@ -13,18 +14,12 @@ const projects = (await getCollection('projects')).sort(
   title="Projects"
   description="Browse our portfolio of residential, hospitality, workplace and retail projects. Filter by category, design style or floor area."
 >
-  <section class="border-b border-ink-900/8 bg-cream-100">
-    <div class="container-x py-14 lg:py-20">
-      <p class="eyebrow reveal">Portfolio</p>
-      <h1 class="reveal mt-3 font-display text-4xl text-ink-900 sm:text-5xl lg:text-6xl">
-        The project gallery
-      </h1>
-      <p class="reveal mt-4 max-w-2xl text-ink-600">
-        {projects.length} projects across homes, cafés and restaurants, workplaces and
-        retail. Use the filters to find work similar to yours.
-      </p>
-    </div>
-  </section>
+  <PageHeader eyebrow="Portfolio" title="The project gallery">
+    <p class="reveal mt-4 max-w-2xl text-ink-600">
+      {projects.length} projects across homes, cafés and restaurants, workplaces and
+      retail. Use the filters to find work similar to yours.
+    </p>
+  </PageHeader>
 
   <section class="py-12 lg:py-16">
     <div class="container-x">
@@ -42,32 +37,32 @@ const projects = (await getCollection('projects')).sort(
         </div>
         <div class="mt-4 grid gap-4 sm:grid-cols-3">
           <label class="block">
-            <span class="text-xs font-semibold tracking-[0.14em] text-ink-500 uppercase">Style</span>
-            <select id="filter-style" class="mt-1.5 w-full rounded-lg border border-ink-900/15 bg-cream-50 px-3 py-2.5 text-sm text-ink-800 focus:border-clay-500 focus:outline-none">
+            <span class="text-xs font-semibold tracking-[0.14em] text-ink-600 uppercase">Style</span>
+            <select id="filter-style" class="mt-1.5 w-full rounded-lg border border-ink-900/15 bg-cream-50 px-3 py-2.5 text-sm text-ink-800 focus:border-clay-500 focus:outline-hidden focus:ring-2 focus:ring-clay-500/30">
               <option value="all">All styles</option>
               {STYLE_TAGS.map((s) => <option value={s}>{s}</option>)}
             </select>
           </label>
           <label class="block">
-            <span class="text-xs font-semibold tracking-[0.14em] text-ink-500 uppercase">Floor area</span>
-            <select id="filter-area" class="mt-1.5 w-full rounded-lg border border-ink-900/15 bg-cream-50 px-3 py-2.5 text-sm text-ink-800 focus:border-clay-500 focus:outline-none">
+            <span class="text-xs font-semibold tracking-[0.14em] text-ink-600 uppercase">Floor area</span>
+            <select id="filter-area" class="mt-1.5 w-full rounded-lg border border-ink-900/15 bg-cream-50 px-3 py-2.5 text-sm text-ink-800 focus:border-clay-500 focus:outline-hidden focus:ring-2 focus:ring-clay-500/30">
               <option value="all">Any size</option>
               {AREA_BANDS.map((b) => <option value={b.value}>{b.label}</option>)}
             </select>
           </label>
           <label class="block">
-            <span class="text-xs font-semibold tracking-[0.14em] text-ink-500 uppercase">Search</span>
+            <span class="text-xs font-semibold tracking-[0.14em] text-ink-600 uppercase">Search</span>
             <input
               id="filter-q"
               type="search"
               placeholder="Project name or location…"
-              class="mt-1.5 w-full rounded-lg border border-ink-900/15 bg-cream-50 px-3 py-2.5 text-sm text-ink-800 placeholder:text-ink-400 focus:border-clay-500 focus:outline-none"
+              class="mt-1.5 w-full rounded-lg border border-ink-900/15 bg-cream-50 px-3 py-2.5 text-sm text-ink-800 placeholder:text-ink-500 focus:border-clay-500 focus:outline-hidden focus:ring-2 focus:ring-clay-500/30"
             />
           </label>
         </div>
         <div class="mt-4 flex items-center justify-between gap-4">
           <p id="filter-count" class="text-sm text-ink-500" aria-live="polite"></p>
-          <button id="filter-clear" class="text-sm font-medium text-clay-600 hover:text-clay-700">
+          <button id="filter-clear" class="-mx-2 inline-flex min-h-11 items-center px-2 text-sm font-medium text-clay-600 hover:text-clay-700">
             Clear filters
           </button>
         </div>
@@ -125,6 +120,7 @@ const projects = (await getCollection('projects')).sort(
       chip.classList.toggle('border', !active);
       chip.classList.toggle('border-ink-800/15', !active);
       chip.classList.toggle('text-ink-700', !active);
+      chip.setAttribute('aria-pressed', String(active));
     });
 
     if (updateUrl) {

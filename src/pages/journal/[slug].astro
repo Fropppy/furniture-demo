@@ -1,7 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
-import { SITE, withBase } from '../../lib/site';
+import { SITE, formatDate, safeJson, withBase } from '../../lib/site';
 
 export async function getStaticPaths() {
   const posts = await getCollection('posts');
@@ -10,8 +10,7 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 const { Content } = await render(post);
-const fmt = (d: Date) =>
-  d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+const fmt = formatDate;
 
 const articleSchema = {
   '@context': 'https://schema.org',
@@ -31,7 +30,7 @@ const articleSchema = {
 >
   <script
     type="application/ld+json"
-    set:html={JSON.stringify(articleSchema)}
+    set:html={safeJson(articleSchema)}
     slot="seo"
   />
   <article class="py-14 lg:py-20">
