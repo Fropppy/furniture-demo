@@ -25,6 +25,36 @@ export function withBase(path: string): string {
   return import.meta.env.BASE_URL.replace(/\/$/, '') + path;
 }
 
+/**
+ * JSON-LD payload escaping: JSON.stringify does not escape "<", so a
+ * "</script>" sequence inside CMS-authored strings could break out of the
+ * ld+json element into HTML context. Escape every "<" as \u003c.
+ */
+export function safeJson(value: unknown): string {
+  return JSON.stringify(value).replace(/</g, '\\u003c');
+}
+
+/**
+ * Shared date formatting (en-GB, e.g. "12 August 2025") so journal listings,
+ * article pages and the home teaser stay identical.
+ */
+export function formatDate(d: Date): string {
+  return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+}
+
+/**
+ * Contact-form delivery. Submissions POST JSON to a Web3Forms-compatible
+ * endpoint and arrive in the studio's admin inbox. The access key is
+ * designed to be public (it only allows sending TO the registered inbox).
+ * Set PUBLIC_FORM_ACCESS_KEY in .env — see README "Contact form".
+ */
+export const FORM = {
+  endpoint: 'https://api.web3forms.com/submit',
+  accessKey: import.meta.env.PUBLIC_FORM_ACCESS_KEY ?? '',
+  fromName: SITE.name,
+  subject: 'New project enquiry — forma website',
+};
+
 export const CATEGORIES = {
   residential: 'Residential',
   hospitality: 'Hospitality',
