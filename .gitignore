@@ -3,5 +3,12 @@ dist/
 .DS_Store
 *.log
 
+# Secrets / local env — never commit real keys
+.env
+.env.*
+!.env.example
+
 # Hidden dirs = local tooling & agent memory, never part of source
+# (.github is re-included below for CI workflows)
 .*/
+!.github/

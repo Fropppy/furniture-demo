@@ -13,7 +13,7 @@ faster stack.
 | Styling    | Bootstrap + custom CSS         | **Tailwind CSS 4** design tokens                |
 | Lightbox   | Fancybox                       | **PhotoSwipe 5** (free for commercial use)      |
 | CMS        | October CMS admin              | **Keystatic** (git-based, free) at `/keystatic` |
-| Sliders    | Slick                          | **Swiper 11**                                   |
+| Sliders    | Slick                          | **Swiper 14** (a11y module, pause control, reduced-motion aware) |
 | Fonts      | Google Fonts CDN               | Self-hosted via Fontsource (no 3rd-party calls) |
 | Images     | Manual WebP + lazy             | SVG placeholder system now; Astro image pipeline for photos |
 | SEO        | Meta + Organization JSON-LD    | Meta, OG, canonical, JSON-LD, sitemap, robots   |
@@ -23,9 +23,11 @@ faster stack.
 
 ```bash
 npm install
-npm run dev        # dev server at http://localhost:4321
-npm run build      # static site → dist/
+npm run dev        # dev server at http://localhost:4321 (Keystatic at /keystatic)
+npm run check      # type + content-schema diagnostics
+npm run build      # astro check + static build → dist/ (build fails on schema errors)
 npm run preview    # serve the built site locally
+npm run og         # regenerate public/og-default.png (after brand changes)
 ```
 
 Deploy = upload `dist/` to any web root. No Node/PHP needed on the server.
@@ -33,20 +35,21 @@ Deploy = upload `dist/` to any web root. No Node/PHP needed on the server.
 ## Where things live
 
 ```
+astro.config.mjs        # site/base switching (DEPLOY_TARGET), integrations
+keystatic.config.ts     # CMS form definitions (keep in sync with content.config.ts)
+scripts/make-og.mjs     # regenerates public/og-default.png (`npm run og`)
 src/
-├── content.config.ts     # Project & post schemas (frontmatter contract)
+├── content.config.ts   # Project & post schemas (frontmatter contract)
 ├── content/
-│   ├── projects/*.md     # ← portfolio entries (add yours here)
-│   └── posts/*.md        # journal articles
-├── components/           # Header, Footer, ProjectCard, Placeholder, Seo…
-├── layouts/Base.astro    # <head>, scroll-reveal, page shell
+│   ├── projects/*.md   # ← portfolio entries (add yours here)
+│   └── posts/*.md      # journal articles
+├── components/         # Header, Footer, PageHeader, ProjectCard, Placeholder, Seo…
+├── layouts/Base.astro  # <head>, scroll-reveal, page shell
 ├── lib/
-│   ├── site.ts           # ← brand name, contacts, categories, area bands
-│   └── placeholders.ts   # SVG line-art scenes (8 room types × any hue)
-├── styles/global.css     # Tailwind theme tokens (cream/clay/ink palette)
-├── scripts/make-og.mjs   # regenerates public/og-default.png (`npm run og`)
-├── keystatic.config.ts   # CMS form definitions (keep in sync with content.config.ts)
-└── pages/                # / /projects/ /projects/[slug] /about /contact /journal /rss.xml
+│   ├── site.ts         # ← brand name, contacts, form config, categories, helpers
+│   └── placeholders.ts # SVG line-art scenes (8 room types × any hue)
+├── styles/global.css   # Tailwind theme tokens (cream/clay/ink palette)
+└── pages/              # / /projects/ /projects/[slug] /about /contact /journal /rss.xml
 ```
 
 ## Editing content — Keystatic CMS
@@ -67,6 +70,25 @@ npm run dev          # then open http://localhost:4321/keystatic
 - The admin path is `/keystatic` (hardcoded by the integration).
 - `keystatic.config.ts` mirrors `src/content.config.ts` — new frontmatter fields go
   in **both** files.
+
+## Contact form — submissions by email
+
+The "Start a project" form on `/contact` sends each enquiry to the studio's **admin
+email inbox** via [Web3Forms](https://web3forms.com) (free). Records are then managed
+from the inbox (labels/forwarding, or later a Google Sheets webhook — no database).
+
+**One-time setup (needs a human with the admin mailbox):**
+
+1. Open [web3forms.com](https://web3forms.com), enter the admin email, submit — the
+   **Access Key** arrives by email.
+2. Put it in a `.env` file (copy `.env.example`): `PUBLIC_FORM_ACCESS_KEY=<key>`.
+   The key is public-safe by design — it only allows *sending to* your inbox.
+3. Restart dev / redeploy. `data-configured="false"` on the form flips to `true`.
+
+Built in: honeypot (`botcheck`) + 3-second time-trap anti-spam, required consent
+checkbox (Vietnam PDPD / Decree 13-2023 compliant copy), client-side validation with
+`aria-invalid`, `role="status"` success/error messaging, and a graceful
+"not configured" fallback that shows the studio's phone/email when no key is set.
 
 ## SEO features built in
 
@@ -96,7 +118,7 @@ hue: 150                # 0–360 tint so the grid stays varied but cohesive
 gallery: [living, dining, bedroom]
 featured: true          # puts it in the home hero slider
 order: 1                # sort order
-seoTitle: …             # optional — overrides the page <title> (keep ≤ 60 chars)
+seoTitle: …             # optional — overrides the page <title> (max 60 chars, enforced)
 seoDescription: …       # optional — overrides the meta description (~155 chars)
 ---
 
@@ -122,13 +144,20 @@ The site builds to plain static HTML and can be deployed anywhere.
 
 **Live demo (GitHub Pages):** https://fropppy.github.io/furniture-demo/
 
+**Automatic (current setup):** every push to `main` runs
+[.github/workflows/deploy.yml](.github/workflows/deploy.yml) — `astro check`, a
+`DEPLOY_TARGET=gh-pages` build, and a deploy of `dist/` to the `gh-pages` branch
+(`.nojekyll` handled by the action). Add `PUBLIC_FORM_ACCESS_KEY` as a repo secret
+under *Settings → Secrets and variables → Actions* so the deployed form sends email.
+
+**Manual fallback** (if Actions is disabled):
+
 ```bash
-npm run build                                   # root build → dist/ (Vercel, nginx, any host)
+npm run check
 DEPLOY_TARGET=gh-pages npm run build            # subpath build for GitHub Pages
+# push dist/ to the gh-pages branch, including a dist/.nojekyll file
 ```
 
-Pushing the built `dist/` to the `gh-pages` branch updates the Pages demo — make sure
-`dist/.nojekyll` is included (without it, GitHub's Jekyll step hides the `_astro/` folder).
 The `DEPLOY_TARGET=gh-pages` switch sets `site`/`base` in `astro.config.mjs`;
 all internal links go through `withBase()` in `src/lib/site.ts` so both targets work.
 
@@ -144,7 +173,8 @@ Note: Vercel's free Hobby plan restricts commercial use — fine for a demo, use
 ## Before launch
 
 - [ ] Set the real domain in `astro.config.mjs` (`SITE_URL`) and `public/robots.txt`
-- [ ] Update brand/contacts in `src/lib/site.ts`- [ ] Wire the contact form (`src/pages/contact.astro`) to Formspree/GetResponse/your API
+- [ ] Update brand/contacts in `src/lib/site.ts` **and** the `BRAND` block in `scripts/make-og.mjs`, then `npm run og`
+- [ ] Create the Web3Forms access key (see "Contact form") and set it in `.env` + the repo Actions secret
 - [ ] Replace placeholder art with project photography
 - [ ] Add GA4 / Meta Pixel / Zalo–Messenger chat snippets in `Base.astro`
 

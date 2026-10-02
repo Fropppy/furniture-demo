@@ -49,7 +49,8 @@ this file is the agent complement. Non-obvious project facts live in `.agent/mem
 
 ```bash
 npm run dev                            # dev server :4321, Keystatic at /keystatic
-npm run build                          # production build (custom-domain mode)
+npm run check                          # astro check (types + content schemas)
+npm run build                          # astro check + production build (custom-domain mode)
 DEPLOY_TARGET=gh-pages npm run build   # build for fropppy.github.io/furniture-demo
 ENABLE_KEYSTATIC=1 npm run build       # build WITH Keystatic routes (non-prod only)
 npm run preview                        # serve dist/
@@ -100,10 +101,13 @@ file read answers the question — don't burn calls for ceremony.
 ## Git
 
 - Conventional commits (`feat:`, `fix:`, `docs:`, …), subject ≤ 50 chars.
-- Demo deploys: build per Commands above, push `dist/` to `gh-pages` branch of
-  `Fropppy/furniture-demo` with `.nojekyll` included.
+- Demo deploys: **push to `main` is enough** — `.github/workflows/deploy.yml` runs
+  check + build + deploy to the `gh-pages` branch automatically. Manual fallback:
+  build with `DEPLOY_TARGET=gh-pages`, push `dist/` to `gh-pages` with `.nojekyll`.
+- Contact-form key lives in `.env` (`PUBLIC_FORM_ACCESS_KEY`, gitignored) + the repo
+  Actions secret; `.env.example` documents it. Never commit real keys.
 - Hidden dirs (`.agent/`, `.serena/`, `.zcode/`, …) are gitignored local-only — never
-  commit or force-add them.
+  commit or force-add them. `.github/` is the one tracked hidden dir (CI).
 
 ## Do NOT
 
