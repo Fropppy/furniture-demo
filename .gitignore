@@ -6,3 +6,5 @@ dist/
 .vercel/
 .vercel
 .keystatic/
+.serena/
+.zcode/
