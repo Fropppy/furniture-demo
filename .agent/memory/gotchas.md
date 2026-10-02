@@ -36,3 +36,14 @@ updated: 2026-10-02
 
 9. **`robots.txt` hardcodes the demo sitemap URL** — update together with `SITE_URL` at launch
    (see state.md backlog item 1).
+
+10. **Stale server squatting on :4321.** A leftover dev server from an old session survives in
+    the background and 404s `_astro/*` bundles — symptom in the browser is the misleading
+    `Failed to fetch dynamically imported module` (looks like a broken build, is actually the
+    wrong server). Before dev/preview sessions, `fuser -k 4321/tcp`; verify with
+    `curl -s -o /dev/null -w '%{http_code}' http://localhost:4321/_astro/<bundle>.js` (200, not 404).
+
+11. **Git identity is not persisted.** `~/.gitconfig` holds only credential helpers; commits
+    fail with `Author identity unknown`. Fix per clone: `git config user.name Fropppy` +
+    `git config user.email Fropppy@users.noreply.github.com` (matches all repo history).
+    Applies to throwaway gh-pages deploy clones too.

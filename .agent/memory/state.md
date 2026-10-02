@@ -27,12 +27,11 @@ resold: the user is the developer, the site goes to paying clients.
 4. Replace SVG placeholders with real photography (keep the scene/hue system for art direction).
 5. Analytics/chat widgets (GA4, Zalo/Slots chat) — client decision.
 6. Optional: VI/EN i18n, price calculators (roadmap ideas in README).
-7. **Dependency upgrades (health check 2026-10-02, supersede the old "14 warnings" note):**
-   - swiper 11.2.10 → 14.3.0 — **critical** prototype pollution (GHSA-hmx5-qpq5-p643). Swiper
-     IS used (hero carousel, `src/pages/index.astro`, Autoplay/EffectFade/Pagination). Fix =
-     major upgrade; hero uses stable core API, low migration risk. Do before client handoff.
+7. **Dependency upgrades (health check 2026-10-02):**
+   - ~~swiper 11 → 14~~ **DONE 2026-10-02** — upgraded to 14.3.0 (zero runtime breaking changes
+     per PLAN_V14), hero verified in browser, deployed to demo. Closed.
    - astro 5.18.2 → 7.3.5 — 10 advisories (mixed XSS/SSRF/RCE), all in SSR/islands/View
-     Transitions/AVIP-optimization features this static site doesn't exercise today. Real
+     Transitions/AVIF-optimization features this static site doesn't exercise today. Real
      exposure ≈ none now, but becomes real when astro:assets processes client photos or SSR
      lands. Fix = breaking major; gate on Keystatic×Astro-7 compatibility + re-derive the
      vite overrides pair (ADR 0002) first. Plan as a dedicated task, never `audit fix --force`.

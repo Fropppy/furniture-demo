@@ -33,3 +33,14 @@ Each entry: what was tried, exact failure, what worked instead.
   (ADR 0003).
 
 - **`pkill -f "astro dev"`** killed its own compound shell command (self-match). See gotchas #8.
+
+- **Hero "broken by swiper 14" misdiagnosis (2026-10-02).** After the swiper upgrade the hero
+  didn't initialize and the module import failed — looked like a breaking change. Actual cause:
+  a stale dev server from an old session was squatting on :4321 and 404ing `_astro/*` bundles
+  (gotchas #10). Lesson: when a served page misbehaves, first verify WHAT is serving the port
+  (`ss -tlnp | grep <port>` + `curl` a hashed bundle path) before blaming a dependency upgrade.
+  True upgrade was clean: v14 has zero runtime breaking changes (PLAN_V14).
+
+- **`gh repo read-file` / zai-mcp-server can time out (2026-10-02).** zai analyze_image timed
+  out twice at 30s during hero QA; browser screenshot + direct inspection was sufficient. Don't
+  block a verification flow on one MCP service — fall back to the browser-level evidence.
