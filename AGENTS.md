@@ -27,7 +27,10 @@ this file is the agent complement. Non-obvious project facts live in `.agent/mem
    facts excepted, they are in `glossary.md` by design).
 9. **Keep `MEMORY.md` an index**: one line per file, ≤ 40 lines total. Detail goes in the
    detail files, never the index.
-10. **Commit memory updates in the same commit as the change they describe.**
+10. **Memory is local-only.** `.gitignore` excludes all hidden dirs (`.*/`) — `.agent/` never
+    gets committed or pushed. Never force-add it (`git add -f`). After cloning the repo on a
+    new machine, agent memory does not exist yet — seed it from `README.md` + first-session
+    exploration, using the layout described above.
 
 ## Hard invariants — do not break
 
@@ -99,7 +102,8 @@ file read answers the question — don't burn calls for ceremony.
 - Conventional commits (`feat:`, `fix:`, `docs:`, …), subject ≤ 50 chars.
 - Demo deploys: build per Commands above, push `dist/` to `gh-pages` branch of
   `Fropppy/furniture-demo` with `.nojekyll` included.
-- Memory edits ride along in the same commit as their code change (protocol rule 10).
+- Hidden dirs (`.agent/`, `.serena/`, `.zcode/`, …) are gitignored local-only — never
+  commit or force-add them.
 
 ## Do NOT
 
