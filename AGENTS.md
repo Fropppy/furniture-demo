@@ -34,16 +34,18 @@ this file is the agent complement. Non-obvious project facts live in `.agent/mem
 
 ## Hard invariants — do not break
 
-- `package.json` `overrides` block (`vite: 6.4.3`, `@vitejs/plugin-react: 5.1.4`) is
-  load-bearing. Removing or bumping it crashes dev/build (`Missing field 'moduleType'`).
-  See `.agent/memory/decisions/0002-pin-vite-6.4.3.md` before any dependency upgrade.
+- `package.json` `overrides` block currently holds `"sharp": "0.35.5"` only (since the
+  Astro 7 upgrade, ADR 0007). Drop it when Astro's own sharp dep reaches ≥0.35.5; never
+  re-add vite/plugin-react pins.
 - Every internal link, asset, canonical, OG, and JSON-LD URL goes through `withBase()`
   (`src/lib/site.ts`). Raw `/...` hrefs break the gh-pages demo base path.
-- `keystatic.config.ts` mirrors `src/content.config.ts` zod schemas. Change both, always.
+- `keystatic.config.ts` mirrors `src/content.config.ts` zod schemas — style options and
+  bounds come from the shared `STYLE_TAGS`/`site.ts` constants. Change both, always.
 - Keystatic integration stays gated (dev / `ENABLE_KEYSTATIC=1`). Never unconditional —
   its routes are `prerender: false` and break static builds.
 - Frontmatter dates in `src/content/` are quoted strings (Keystatic js-yaml compat).
-- Every gh-pages deploy recreates `dist/.nojekyll` after build (build wipes `dist/`).
+- Deploys run through CI (`.github/workflows/deploy.yml`); if doing a manual gh-pages
+  push, recreate `dist/.nojekyll` after build (build wipes `dist/`).
 
 ## Commands
 
