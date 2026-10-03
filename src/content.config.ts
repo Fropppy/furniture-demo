@@ -29,27 +29,51 @@ const seoDescription = z.preprocess(
 
 const projects = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/projects' }),
-  schema: z.object({
-    title: z.string(),
-    summary: z.string(),
-    client: z.string().optional(),
-    category: z.enum(['residential', 'hospitality', 'office', 'retail']),
-    // Must stay an enum of STYLE_TAGS: the filter UI only offers those six,
-    // and a free string here would silently vanish from style filtering.
-    style: z.enum(STYLE_TAGS),
-    location: z.string(),
-    area: z.number().int().min(1),
-    year: z.number().int().min(1990).max(2100),
-    budget: z.string().optional(),
-    services: z.array(z.string()).default([]),
-    scene: scenes.default('living'),
-    hue: z.number().int().min(0).max(360).default(28),
-    gallery: z.array(scenes).default([]),
-    featured: z.boolean().default(false),
-    order: z.number().default(99),
-    seoTitle,
-    seoDescription,
-  }),
+  // `image` comes from the schema-function argument (the astro:content import
+  // was removed in Astro 3). It resolves a frontmatter path RELATIVE TO THE
+  // ENTRY FILE into ImageMetadata and fails the build if the file is missing.
+  schema: ({ image }) =>
+    z.object({
+      title: z.string(),
+      summary: z.string(),
+      client: z.string().optional(),
+      category: z.enum(['residential', 'hospitality', 'office', 'retail']),
+      // Must stay an enum of STYLE_TAGS: the filter UI only offers those six,
+      // and a free string here would silently vanish from style filtering.
+      style: z.enum(STYLE_TAGS),
+      location: z.string(),
+      area: z.number().int().min(1),
+      year: z.number().int().min(1990).max(2100),
+      budget: z.string().optional(),
+      services: z.array(z.string()).default([]),
+      scene: scenes.default('living'),
+      hue: z.number().int().min(0).max(360).default(28),
+      gallery: z.array(scenes).default([]),
+      // Real photography (Keystatic uploads land in src/assets/images/projects/).
+      // Templates fall back to the SVG illustrations when these are absent.
+      // Alt text is required here, not optional — cover art is content
+      // (WCAG 1.1.1), and the editor can't save without it in Keystatic.
+      cover: z
+        .object({
+          image: image(),
+          alt: z.string().min(1),
+          caption: z.string().optional(),
+        })
+        .optional(),
+      photos: z
+        .array(
+          z.object({
+            image: image(),
+            alt: z.string().min(1),
+            caption: z.string().optional(),
+          }),
+        )
+        .optional(),
+      featured: z.boolean().default(false),
+      order: z.number().default(99),
+      seoTitle,
+      seoDescription,
+    }),
 });
 
 const posts = defineCollection({

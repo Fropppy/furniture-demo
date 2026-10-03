@@ -21,6 +21,17 @@ jobs:
 
       - run: npm ci
 
+      # Astro caches processed images in node_modules/.astro; restore after
+      # npm ci (which replaces node_modules) so unchanged photos skip
+      # re-encoding. Saved back automatically at job end.
+      - name: Restore Astro image cache
+        uses: actions/cache@v4
+        with:
+          path: node_modules/.astro
+          key: astro-images-${{ runner.os }}-${{ hashFiles('src/assets/**', 'package-lock.json') }}
+          restore-keys: |
+            astro-images-${{ runner.os }}-
+
       # type + content-schema gate, then build for the /furniture-demo base
       - run: npm run check
       - run: npm run build

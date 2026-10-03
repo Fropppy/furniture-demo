@@ -20,6 +20,13 @@ const useKeystatic = isDev || process.env.ENABLE_KEYSTATIC === '1';
 export default defineConfig({
   site: isGhPages ? 'https://fropppy.github.io' : SITE_URL,
   base: isGhPages ? '/furniture-demo' : '/',
+  // Default every <Image> to a responsive constrained layout (auto srcset +
+  // sizes + webp). responsiveStyles injects the small global CSS that makes
+  // those images scale/cover correctly.
+  image: {
+    layout: 'constrained',
+    responsiveStyles: true,
+  },
   integrations: [
     sitemap({ filter: (page) => !page.endsWith('/rss.xml') }),
     react(),

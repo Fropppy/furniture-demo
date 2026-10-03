@@ -15,7 +15,7 @@ faster stack.
 | CMS        | October CMS admin              | **Keystatic** (git-based, free) at `/keystatic` |
 | Sliders    | Slick                          | **Swiper 14** (a11y module, pause control, reduced-motion aware) |
 | Fonts      | Google Fonts CDN               | Self-hosted via Fontsource (no 3rd-party calls) |
-| Images     | Manual WebP + lazy             | SVG placeholder system now; Astro image pipeline for photos |
+| Images     | Manual WebP + lazy             | SVG illustrations now; **photo uploads via Keystatic** + Astro responsive image pipeline (WebP/AVIF, srcset) |
 | SEO        | Meta + Organization JSON-LD    | Meta, OG, canonical, JSON-LD, sitemap, robots   |
 | Deploy     | nginx + PHP host               | Any static host (nginx, `public_html`, Vercel…) |
 
@@ -43,6 +43,7 @@ src/
 ├── content/
 │   ├── projects/*.md   # ← portfolio entries (add yours here)
 │   └── posts/*.md      # journal articles
+├── assets/images/      # project photos uploaded via Keystatic (per-slug folders)
 ├── components/         # Header, Footer, PageHeader, ProjectCard, Placeholder, Seo…
 ├── layouts/Base.astro  # <head>, scroll-reveal, page shell
 ├── lib/
@@ -50,6 +51,8 @@ src/
 │   └── placeholders.ts # SVG line-art scenes (8 room types × any hue)
 ├── styles/global.css   # Tailwind theme tokens (cream/clay/ink palette)
 └── pages/              # / /projects/ /projects/[slug] /about /contact /journal /rss.xml
+docs/
+└── huong-dan-nhap-lieu.md  # Vietnamese one-page guide for the client's editor
 ```
 
 ## Editing content — Keystatic CMS
@@ -70,6 +73,12 @@ npm run dev          # then open http://localhost:4321/keystatic
 - The admin path is `/keystatic` (hardcoded by the integration).
 - `keystatic.config.ts` mirrors `src/content.config.ts` — new frontmatter fields go
   in **both** files.
+- **Project photos:** each project has a *Cover photo* group and a *Photo gallery*
+  array in the admin — upload a file, type the (required) alt text, save. Files land
+  in `src/assets/images/projects/<slug>/` and the build turns them into responsive
+  WebP with `srcset`. Projects without photos keep the SVG illustrations; alt text
+  and image files are enforced by the form. The editor-facing rules live in
+  [docs/huong-dan-nhap-lieu.md](docs/huong-dan-nhap-lieu.md) (Vietnamese).
 
 ## Contact form — submissions by email
 
@@ -116,27 +125,46 @@ services: [Interior design, Custom furniture]
 scene: living           # placeholder scene: living|bedroom|kitchen|dining|office|cafe|lounge|facade
 hue: 150                # 0–360 tint so the grid stays varied but cohesive
 gallery: [living, dining, bedroom]
+# Real photography (optional — falls back to scene/hue illustrations):
+# cover:
+#   image: ../../assets/images/projects/my-project/cover.jpg
+#   alt: Living room with walnut shelving, natural light
+#   caption: Optional caption
+# photos:
+#   - image: ../../assets/images/projects/my-project/0.jpg
+#     alt: Kitchen with terrazzo island, seen from the dining table
 featured: true          # puts it in the home hero slider
 order: 1                # sort order
 seoTitle: …             # optional — overrides the page <title> (max 60 chars, enforced)
 seoDescription: …       # optional — overrides the meta description (~155 chars)
 ---
 
-(Easiest way: run `npm run dev` and add it through `/keystatic`.)
-
 ## The brief
+
 Markdown write-up shown on the project page.
 ```
 
-## Replacing placeholders with photos
+(Easiest way: run `npm run dev` and add it through `/keystatic`.)
 
-Gallery images are generated SVG line-art (`src/lib/placeholders.ts`) so the
-site is complete and license-clean on day one. To switch to photography:
+## Project photography (wired)
 
-1. Drop photos in `src/assets/projects/<slug>/`.
-2. In the project frontmatter, replace `scene`/`hue`/`gallery` with image
-   paths and render them through `astro:assets` (`<Image />`) — you get
-   AVIF/WebP, responsive `srcset` and lazy loading at build time.
+Cover and gallery photo support is fully wired — no code changes needed to add
+photos:
+
+- **Via the admin (intended path):** open `/keystatic` → *Projects* → a project →
+  *Cover photo* / *Photo gallery* → **Choose file**, type the alt text, **Save**.
+- **Via git:** drop JPGs in `src/assets/images/projects/<slug>/` and reference them
+  from frontmatter with paths relative to the entry file (see the example in
+  "Adding a project").
+
+Either way the build runs images through `astro:assets`: responsive WebP `srcset`
+(`layout="constrained"` site-wide, `full-width` for hero/cover), correct dimensions
+(no layout shift), lazy loading, and `fetchpriority="high"` on the first hero slide
+and the project cover. `alt` and the image file itself are required (schema-enforced),
+and a missing referenced file fails `npm run build` — a deliberate CI gate.
+Projects without photos keep the generated SVG illustrations everywhere (ADR 0005),
+and the illustration gallery on the detail page is replaced by the photo gallery
+only when at least one photo exists.
 
 ## Deploy
 
@@ -175,12 +203,12 @@ Note: Vercel's free Hobby plan restricts commercial use — fine for a demo, use
 - [ ] Set the real domain in `astro.config.mjs` (`SITE_URL`) and `public/robots.txt`
 - [ ] Update brand/contacts in `src/lib/site.ts` **and** the `BRAND` block in `scripts/make-og.mjs`, then `npm run og`
 - [ ] Create the Web3Forms access key (see "Contact form") and set it in `.env` + the repo Actions secret
-- [ ] Replace placeholder art with project photography
+- [ ] Upload real project photography via `/keystatic` (schema ready — see "Project photography")
 - [ ] Add GA4 / Meta Pixel / Zalo–Messenger chat snippets in `Base.astro`
 
 ## Roadmap ideas (mirroring the reference, when needed)
 
 - VI/EN i18n routing (`astro:i18n`)
 - Investment / break-even calculators (the reference's lead magnets)
-- Real project photography via `astro:assets`
+- Journal post covers via the same image() schema pattern (projects are done)
 - Dynamic lead widgets (Zalo, Messenger, WhatsApp float)

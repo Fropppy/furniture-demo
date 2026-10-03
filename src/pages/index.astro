@@ -1,5 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import Placeholder from '../components/Placeholder.astro';
 import ProjectCard from '../components/ProjectCard.astro';
@@ -54,14 +55,29 @@ const stats = [
       <section class="relative -mt-16 lg:-mt-20" aria-label="Featured projects">
         <div class="swiper hero-swiper h-[88vh] min-h-[540px]">
           <div class="swiper-wrapper">
-            {featured.map((p) => (
+            {featured.map((p, i) => (
               <div class="swiper-slide relative overflow-hidden">
-                <Placeholder
-                  scene={p.data.scene}
-                  hue={p.data.hue}
-                  alt={`${p.data.title} — hero image`}
-                  class="absolute inset-0 h-full w-full"
-                />
+                {
+                  p.data.cover ? (
+                    <Image
+                      src={p.data.cover.image}
+                      alt={p.data.cover.alt}
+                      layout="full-width"
+                      // Only the first paint is the LCP; later slides load
+                      // eagerly anyway (fade effect) but stay off the
+                      // priority lane.
+                      priority={i === 0}
+                      class="absolute inset-0 h-full w-full object-cover"
+                    />
+                  ) : (
+                    <Placeholder
+                      scene={p.data.scene}
+                      hue={p.data.hue}
+                      alt={`${p.data.title} — hero image`}
+                      class="absolute inset-0 h-full w-full"
+                    />
+                  )
+                }
                 <div class="absolute inset-0 bg-gradient-to-t from-ink-900/75 via-ink-900/25 to-ink-900/10" />
                 <div class="container-x absolute inset-x-0 bottom-0 pb-14 sm:pb-20">
                   <p class="text-xs font-semibold tracking-[0.22em] text-cream-200/90 uppercase">
