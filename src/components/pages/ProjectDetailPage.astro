@@ -260,14 +260,35 @@ const workSchema = {
 </Base>
 
 <script>
-  import PhotoSwipeLightbox from 'photoswipe/lightbox';
-  import 'photoswipe/style.css';
+  // PhotoSwipe ships out of the critical path: the chunk loads at idle, or on
+  // the first hover/touch/focus over the gallery so it's bound before a click.
+  // Projects without a photos gallery never load it at all.
+  let lightboxStarted = false;
+  async function initLightbox() {
+    if (lightboxStarted) return;
+    lightboxStarted = true;
+    const { default: PhotoSwipeLightbox } = await import('photoswipe/lightbox');
+    await import('photoswipe/style.css');
+    new PhotoSwipeLightbox({
+      gallery: '.pswp-gallery',
+      children: 'a',
+      bgOpacity: 0.92,
+      pswpModule: () => import('photoswipe'),
+    }).init();
+  }
 
-  const lightbox = new PhotoSwipeLightbox({
-    gallery: '.pswp-gallery',
-    children: 'a',
-    bgOpacity: 0.92,
-    pswpModule: () => import('photoswipe'),
-  });
-  lightbox.init();
+  const gallery = document.querySelector('.pswp-gallery');
+  if (gallery) {
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(() => void initLightbox(), { timeout: 3000 });
+    } else {
+      setTimeout(() => void initLightbox(), 2000);
+    }
+    for (const type of ['pointerenter', 'touchstart', 'focusin'] as const) {
+      gallery.addEventListener(type, () => void initLightbox(), {
+        once: true,
+        passive: true,
+      });
+    }
+  }
 </script>

@@ -1,5 +1,5 @@
 // @ts-check
-import { defineConfig } from 'astro/config';
+import { defineConfig, fontProviders } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 import react from '@astrojs/react';
@@ -27,6 +27,44 @@ export default defineConfig({
     layout: 'constrained',
     responsiveStyles: true,
   },
+  // Hash-based meta CSP — works on GitHub Pages because Astro delivers it as
+  // a <meta> tag (header mode would need an adapter). script-src stays strict
+  // (hashes + self); style-src keeps 'unsafe-inline' because the reveal
+  // animation uses style="--reveal-delay:…" attributes, which hashes can't
+  // cover. Script injection is the XSS risk; style leakage is not.
+  security: {
+    csp: {
+      scriptDirective: { resources: ["'self'"] },
+      styleDirective: { resources: ["'self'", "'unsafe-inline'"] },
+    },
+  },
+  // Hover prefetch of internal links — page-to-page nav on the portfolio is
+  // near-instant for the price of a tiny script.
+  prefetch: { prefetchAll: true, defaultStrategy: 'hover' },
+  // Self-hosted fonts via the Fontsource provider: emits @font-face + a
+  // metric-matched fallback family (no swap CLS) and powers <Font preload />
+  // in Base.astro. Vietnamese subset is required — the site is bilingual.
+  fonts: [
+    {
+      provider: fontProviders.fontsource(),
+      name: 'Inter',
+      cssVariable: '--font-astro-sans',
+      // Range syntax = take the variable package (@fontsource-variable/inter)
+      weights: ['100 900'],
+      styles: ['normal'],
+      subsets: ['latin', 'vietnamese'],
+      fallbacks: ['ui-sans-serif', 'system-ui', 'sans-serif'],
+    },
+    {
+      provider: fontProviders.fontsource(),
+      name: 'Playfair Display',
+      cssVariable: '--font-astro-display',
+      weights: ['400 900'],
+      styles: ['normal'],
+      subsets: ['latin', 'vietnamese'],
+      fallbacks: ['Georgia', 'serif'],
+    },
+  ],
   // EN unprefixed (default), VI under /vi/… — routing is manual: shared page
   // components render from src/pages/ and src/pages/vi/ with a locale prop.
   i18n: {

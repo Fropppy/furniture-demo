@@ -1,10 +1,10 @@
 @import "tailwindcss";
-@import "@fontsource-variable/inter";
-@import "@fontsource-variable/playfair-display";
 
 @theme {
-  --font-sans: "Inter Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-display: "Playfair Display Variable", Georgia, "Times New Roman", serif;
+  /* Families come from the Astro fonts API (--font-astro-* in astro.config.mjs,
+     emitted with metric-matched fallbacks and preload links by <Font />). */
+  --font-sans: var(--font-astro-sans);
+  --font-display: var(--font-astro-display);
 
   /* Warm gallery palette */
   --color-cream-50: #fdfbf7;
