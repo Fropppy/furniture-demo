@@ -37,6 +37,13 @@ dưới 125 ký tự, không viết "ảnh của...".
 - ✅ `Bếp với đảo đá terrazzo, chụp từ bàn ăn`
 - ❌ `Ảnh 1`, `phòng đẹp`
 
+### Trường tiếng Việt (VI)
+
+Mỗi trường chính có thêm trường `(VI)` — điền bản tiếng Việt vào đó. Nếu bỏ trống,
+bản tiếng Việt của website sẽ dùng tạm nội dung tiếng Anh, nên không bao giờ bị
+thiếu nội dung. Ưu tiên điền: **Title (VI)**, **Summary (VI)**, **Location (VI)**.
+Bài viết (nội dung dài) hiện dùng chung bản tiếng Anh cho cả hai ngôn ngữ.
+
 ## 3. Các trường của một dự án
 
 | Trường | Bắt buộc | Ý nghĩa |

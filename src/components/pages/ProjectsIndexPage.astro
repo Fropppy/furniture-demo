@@ -1,0 +1,183 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import PageHeader from '../PageHeader.astro';
+import ProjectCard from '../ProjectCard.astro';
+import { CATEGORIES, STYLE_TAGS, AREA_BANDS, type Locale } from '../../lib/site';
+import { UI } from '../../lib/i18n';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = UI[locale];
+const projects = (await getCollection('projects')).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+---
+
+<Base title={t.meta.projects.title} description={t.meta.projects.description} {locale}>
+  <PageHeader eyebrow={t.projects.eyebrow} title={t.projects.h1}>
+    <p class="reveal mt-4 max-w-2xl text-ink-600">{t.projects.lede(projects.length)}</p>
+  </PageHeader>
+
+  <section class="py-12 lg:py-16">
+    <div class="container-x">
+      <!-- Filter bar -->
+      <div id="project-filter" class="reveal rounded-xl border border-ink-900/8 bg-cream-100 p-5 sm:p-6">
+        <div class="flex flex-wrap gap-2" role="group" aria-label={t.projects.filterGroup}>
+          <button class="filter-chip btn bg-ink-900 text-cream-50" data-filter="category" data-value="all">{t.projects.all}</button>
+          {
+            Object.entries(CATEGORIES).map(([key, labels]) => (
+              <button class="filter-chip btn border border-ink-800/15 text-ink-700 hover:border-ink-800/40" data-filter="category" data-value={key}>
+                {labels[locale]}
+              </button>
+            ))
+          }
+        </div>
+        <div class="mt-4 grid gap-4 sm:grid-cols-3">
+          <label class="block">
+            <span class="text-xs font-semibold tracking-[0.14em] text-ink-600 uppercase">{t.projects.styleLabel}</span>
+            <select id="filter-style" class="mt-1.5 w-full rounded-lg border border-ink-900/15 bg-cream-50 px-3 py-2.5 text-sm text-ink-800 focus:border-clay-500 focus:outline-hidden focus:ring-2 focus:ring-clay-500/30">
+              <option value="all">{t.projects.allStyles}</option>
+              {STYLE_TAGS.map((s) => <option value={s}>{s}</option>)}
+            </select>
+          </label>
+          <label class="block">
+            <span class="text-xs font-semibold tracking-[0.14em] text-ink-600 uppercase">{t.projects.areaLabel}</span>
+            <select id="filter-area" class="mt-1.5 w-full rounded-lg border border-ink-900/15 bg-cream-50 px-3 py-2.5 text-sm text-ink-800 focus:border-clay-500 focus:outline-hidden focus:ring-2 focus:ring-clay-500/30">
+              <option value="all">{t.projects.anySize}</option>
+              {AREA_BANDS.map((b) => <option value={b.value}>{b.label[locale]}</option>)}
+            </select>
+          </label>
+          <label class="block">
+            <span class="text-xs font-semibold tracking-[0.14em] text-ink-600 uppercase">{t.projects.searchLabel}</span>
+            <input
+              id="filter-q"
+              type="search"
+              placeholder={t.projects.searchPlaceholder}
+              class="mt-1.5 w-full rounded-lg border border-ink-900/15 bg-cream-50 px-3 py-2.5 text-sm text-ink-800 placeholder:text-ink-500 focus:border-clay-500 focus:outline-hidden focus:ring-2 focus:ring-clay-500/30"
+            />
+          </label>
+        </div>
+        <div class="mt-4 flex items-center justify-between gap-4">
+          <p id="filter-count" class="text-sm text-ink-500" aria-live="polite" data-count-template={t.projects.countTemplate}></p>
+          <button id="filter-clear" class="-mx-2 inline-flex min-h-11 items-center px-2 text-sm font-medium text-clay-600 hover:text-clay-700">
+            {t.projects.clear}
+          </button>
+        </div>
+      </div>
+
+      <!-- Grid -->
+      <div
+        id="project-grid"
+        class="mt-12 grid gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-3"
+      >
+        {projects.map((p) => <ProjectCard project={p} {locale} />)}
+      </div>
+
+      <div id="filter-empty" class="mt-12 hidden rounded-xl border border-dashed border-ink-900/15 py-20 text-center">
+        <p class="font-display text-2xl text-ink-900">{t.projects.emptyHeading}</p>
+        <p class="mt-2 text-ink-500">{t.projects.emptyText}</p>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<script>
+  const grid = document.getElementById('project-grid')!;
+  const cards = [...grid.querySelectorAll<HTMLElement>('[data-category]')];
+  const chips = [...document.querySelectorAll<HTMLButtonElement>('.filter-chip')];
+  const styleSel = document.getElementById('filter-style') as HTMLSelectElement;
+  const areaSel = document.getElementById('filter-area') as HTMLSelectElement;
+  const qInput = document.getElementById('filter-q') as HTMLInputElement;
+  const countEl = document.getElementById('filter-count')!;
+  const emptyEl = document.getElementById('filter-empty')!;
+
+  const state = { category: 'all', style: 'all', area: 'all', q: '' };
+
+  function apply(updateUrl: boolean) {
+    let visible = 0;
+    for (const card of cards) {
+      const match =
+        (state.category === 'all' || card.dataset.category === state.category) &&
+        (state.style === 'all' || card.dataset.style === state.style) &&
+        (state.area === 'all' || card.dataset.band === state.area) &&
+        (state.q === '' ||
+          (card.dataset.title ?? '').includes(state.q) ||
+          (card.querySelector('p.text-sm')?.textContent ?? '').toLowerCase().includes(state.q));
+      card.classList.toggle('hidden', !match);
+      if (match) visible++;
+    }
+    countEl.textContent = (countEl.dataset.countTemplate ?? 'Showing {v} of {n} projects')
+      .replace('{v}', String(visible))
+      .replace('{n}', String(cards.length));
+    emptyEl.classList.toggle('hidden', visible > 0);
+    grid.classList.toggle('hidden', visible === 0);
+
+    chips.forEach((chip) => {
+      const active = chip.dataset.value === state.category;
+      chip.classList.toggle('bg-ink-900', active);
+      chip.classList.toggle('text-cream-50', active);
+      chip.classList.toggle('border', !active);
+      chip.classList.toggle('border-ink-800/15', !active);
+      chip.classList.toggle('text-ink-700', !active);
+      chip.setAttribute('aria-pressed', String(active));
+    });
+
+    if (updateUrl) {
+      const params = new URLSearchParams();
+      if (state.category !== 'all') params.set('category', state.category);
+      if (state.style !== 'all') params.set('style', state.style);
+      if (state.area !== 'all') params.set('area', state.area);
+      if (state.q) params.set('q', state.q);
+      const qs = params.toString();
+      history.replaceState(null, '', qs ? `?${qs}` : location.pathname);
+    }
+  }
+
+  function clear() {
+    state.category = 'all';
+    state.style = 'all';
+    state.area = 'all';
+    state.q = '';
+    styleSel.value = 'all';
+    areaSel.value = 'all';
+    qInput.value = '';
+    apply(true);
+  }
+
+  chips.forEach((chip) =>
+    chip.addEventListener('click', () => {
+      state.category = chip.dataset.value!;
+      apply(true);
+    }),
+  );
+  styleSel.addEventListener('change', () => {
+    state.style = styleSel.value;
+    apply(true);
+  });
+  areaSel.addEventListener('change', () => {
+    state.area = areaSel.value;
+    apply(true);
+  });
+  qInput.addEventListener('input', () => {
+    state.q = qInput.value.trim().toLowerCase();
+    apply(true);
+  });
+  document.getElementById('filter-clear')!.addEventListener('click', clear);
+
+  // Restore state from URL (?category=&style=&area=&q=)
+  const params = new URLSearchParams(location.search);
+  if (params.has('category') || params.has('style') || params.has('area') || params.has('q')) {
+    state.category = params.get('category') ?? 'all';
+    state.style = params.get('style') ?? 'all';
+    state.area = params.get('area') ?? 'all';
+    state.q = (params.get('q') ?? '').toLowerCase();
+    styleSel.value = state.style;
+    areaSel.value = state.area;
+    qInput.value = params.get('q') ?? '';
+  }
+  apply(false);
+</script>

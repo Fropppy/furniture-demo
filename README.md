@@ -44,13 +44,16 @@ src/
 │   ├── projects/*.md   # ← portfolio entries (add yours here)
 │   └── posts/*.md      # journal articles
 ├── assets/images/      # project photos uploaded via Keystatic (per-slug folders)
+├── components/pages/   # shared page bodies (rendered once per locale)
 ├── components/         # Header, Footer, PageHeader, ProjectCard, Placeholder, Seo…
 ├── layouts/Base.astro  # <head>, scroll-reveal, page shell
 ├── lib/
 │   ├── site.ts         # ← brand name, contacts, form config, categories, helpers
+│   ├── i18n.ts         # UI-string dictionary (en/vi) + locale helpers
 │   └── placeholders.ts # SVG line-art scenes (8 room types × any hue)
 ├── styles/global.css   # Tailwind theme tokens (cream/clay/ink palette)
 └── pages/              # / /projects/ /projects/[slug] /about /contact /journal /rss.xml
+    └── vi/             # same routes under /vi/… (Vietnamese)
 docs/
 └── huong-dan-nhap-lieu.md  # Vietnamese one-page guide for the client's editor
 ```
@@ -79,6 +82,27 @@ npm run dev          # then open http://localhost:4321/keystatic
   WebP with `srcset`. Projects without photos keep the SVG illustrations; alt text
   and image files are enforced by the form. The editor-facing rules live in
   [docs/huong-dan-nhap-lieu.md](docs/huong-dan-nhap-lieu.md) (Vietnamese).
+
+## Languages — EN default, VI toggle
+
+The site is bilingual: English at unprefixed URLs (`/projects/…`) and Vietnamese
+under `/vi/…`, switched by the EN | VI control in the header. The toggle links to
+the equivalent page in the other locale (filter query strings survive the switch).
+
+- **UI strings** live in the dictionary `src/lib/i18n.ts` (`UI.en` / `UI.vi` —
+  VI is type-checked against the EN shape, so a missing key fails `astro check`).
+- **Content** is one entry per project/post with optional `…Vi` frontmatter fields
+  (`titleVi`, `summaryVi`, `locationVi`, `servicesVi`, `seoTitleVi`, …). The VI
+  pages fall back field-by-field to the EN value when a `…Vi` field is empty —
+  translate at your own pace; nothing breaks half-done. Bodies currently stay EN
+  on VI pages (per-field body translation is a roadmap item).
+- **Routes** are thin wrappers: `src/pages/*.astro` and `src/pages/vi/*.astro`
+  render the same shared component in `src/components/pages/` with a locale prop.
+- **SEO:** reciprocal `hreflang` alternates + `x-default` in `<head>`, per-locale
+  canonicals, `og:locale`, `<html lang>` (`en-US` / `vi-VN`), and `inLanguage` in
+  JSON-LD. RSS stays EN-only.
+- Astro config: `i18n: { defaultLocale: 'en', locales: ['en','vi'], routing:
+  { prefixDefaultLocale: false } }` — routing itself is manual (static output).
 
 ## Contact form — submissions by email
 
@@ -208,7 +232,7 @@ Note: Vercel's free Hobby plan restricts commercial use — fine for a demo, use
 
 ## Roadmap ideas (mirroring the reference, when needed)
 
-- VI/EN i18n routing (`astro:i18n`)
 - Investment / break-even calculators (the reference's lead magnets)
 - Journal post covers via the same image() schema pattern (projects are done)
+- VI translations of project/article bodies (UI + frontmatter are bilingual now)
 - Dynamic lead widgets (Zalo, Messenger, WhatsApp float)

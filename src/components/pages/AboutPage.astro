@@ -1,0 +1,78 @@
+---
+import Base from '../../layouts/Base.astro';
+import Placeholder from '../Placeholder.astro';
+import { withBase, type Locale } from '../../lib/site';
+import { UI } from '../../lib/i18n';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = UI[locale];
+const prefix = locale === 'vi' ? '/vi' : '';
+---
+
+<Base title={t.meta.about.title} description={t.meta.about.description} {locale}>
+  <section class="border-b border-ink-900/8 bg-cream-100">
+    <div class="container-x py-14 lg:py-20">
+      <p class="eyebrow reveal">{t.about.eyebrow}</p>
+      <h1 class="reveal mt-3 max-w-3xl font-display text-4xl text-ink-900 sm:text-5xl lg:text-6xl">
+        {t.about.h1}
+      </h1>
+      <p class="reveal mt-5 max-w-2xl text-lg text-ink-600">
+        {t.about.lede}
+      </p>
+    </div>
+  </section>
+
+  <section class="py-16 lg:py-24">
+    <div class="container-x grid items-start gap-12 lg:grid-cols-2">
+      <div class="reveal overflow-hidden rounded-xl bg-cream-100">
+        <Placeholder
+          scene="lounge"
+          hue={30}
+          alt={t.about.workshopAlt}
+          class="aspect-[4/3] w-full"
+        />
+      </div>
+      <div class="reveal">
+        <p class="eyebrow">{t.about.storyEyebrow}</p>
+        <h2 class="mt-3 font-display text-3xl text-ink-900 sm:text-4xl">
+          {t.about.storyHeading}
+        </h2>
+        <div class="mt-5 space-y-4 text-ink-600 leading-relaxed">
+          {t.about.story.map((paragraph) => <p>{paragraph}</p>)}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-cream-100 py-16 lg:py-24">
+    <div class="container-x">
+      <p class="eyebrow reveal">{t.about.believeEyebrow}</p>
+      <h2 class="reveal mt-3 font-display text-3xl text-ink-900 sm:text-4xl">{t.about.believeHeading}</h2>
+      <div class="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+        {
+          t.about.values.map((v, i) => (
+            <div class="reveal border-t-2 border-clay-600/60 pt-5" style={`--reveal-delay:${i * 80}ms`}>
+              <h3 class="font-display text-xl text-ink-900">{v.title}</h3>
+              <p class="mt-3 text-sm leading-relaxed text-ink-600">{v.text}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="py-16 text-center lg:py-20">
+    <div class="container-x reveal max-w-2xl">
+      <h2 class="font-display text-3xl text-ink-900 sm:text-4xl">{t.about.proofHeading}</h2>
+      <p class="mt-4 text-ink-600">{t.about.proofText}</p>
+      <div class="mt-8 flex justify-center gap-4">
+        <a href={withBase(`${prefix}/projects/`)} class="btn-primary">{t.about.viewProjects}</a>
+        <a href={withBase(`${prefix}/contact/`)} class="btn-ghost">{t.about.contactUs}</a>
+      </div>
+    </div>
+  </section>
+</Base>

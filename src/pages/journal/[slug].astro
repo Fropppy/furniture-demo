@@ -1,54 +1,12 @@
 ---
-import { getCollection, render } from 'astro:content';
-import Base from '../../layouts/Base.astro';
-import { SITE, formatDate, safeJson, withBase } from '../../lib/site';
+import JournalPostPage from '../../components/pages/JournalPostPage.astro';
+import { postStaticPaths } from '../../lib/paths';
 
 export async function getStaticPaths() {
-  const posts = await getCollection('posts');
-  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+  return postStaticPaths();
 }
 
 const { post } = Astro.props;
-const { Content } = await render(post);
-const fmt = formatDate;
-
-const articleSchema = {
-  '@context': 'https://schema.org',
-  '@type': 'Article',
-  headline: post.data.title,
-  description: post.data.excerpt,
-  datePublished: post.data.date.toISOString(),
-  author: { '@type': 'Organization', name: SITE.name },
-  publisher: { '@type': 'Organization', name: SITE.name },
-  mainEntityOfPage: new URL(withBase(`/journal/${post.id}/`), Astro.site),
-};
 ---
 
-<Base
-  title={post.data.seoTitle ?? post.data.title}
-  description={post.data.seoDescription ?? post.data.excerpt}
->
-  <script
-    type="application/ld+json"
-    set:html={safeJson(articleSchema)}
-    slot="seo"
-  />
-  <article class="py-14 lg:py-20">
-    <div class="container-x mx-auto max-w-3xl">
-      <p class="eyebrow reveal">
-        {post.data.tag} · {fmt(post.data.date)}
-      </p>
-      <h1 class="reveal mt-3 font-display text-3xl text-ink-900 sm:text-4xl lg:text-5xl">
-        {post.data.title}
-      </h1>
-      <div class="prose-brand mt-10">
-        <Content />
-      </div>
-      <div class="mt-16 border-t border-ink-900/10 pt-8">
-        <a href={withBase('/journal/')} class="text-sm font-semibold text-clay-600 hover:text-clay-700">
-          ← All articles
-        </a>
-      </div>
-    </div>
-  </article>
-</Base>
+<JournalPostPage post={post} locale="en" />

@@ -1,0 +1,195 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHeader from '../PageHeader.astro';
+import { FORM, SITE, withBase, type Locale } from '../../lib/site';
+import { UI } from '../../lib/i18n';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = UI[locale];
+---
+
+<Base title={t.meta.contact.title} description={t.meta.contact.description} {locale}>
+  <PageHeader eyebrow={t.contact.eyebrow} title={t.contact.h1} lede={t.contact.lede} />
+
+  <section class="py-16 lg:py-24">
+    <div class="container-x grid gap-14 lg:grid-cols-[3fr_2fr]">
+      <!-- Form -->
+      <div class="reveal">
+        <form
+          id="contact-form"
+          class="grid gap-5 sm:grid-cols-2"
+          data-configured={FORM.accessKey ? 'true' : 'false'}
+          data-endpoint={FORM.endpoint}
+          data-fallback-email={SITE.email}
+          data-fallback-phone={SITE.phone}
+          data-msg-unconfigured={t.contact.msgUnconfigured}
+          data-msg-bot={t.contact.msgBot}
+          data-msg-success={t.contact.msgSuccess}
+          data-msg-error={t.contact.msgError}
+          data-msg-no-connection={t.contact.msgNoConnection}
+          data-msg-sending={t.contact.sending}
+          novalidate
+        >
+          <input type="hidden" name="access_key" value={FORM.accessKey} />
+          <input type="hidden" name="subject" value={FORM.subject} />
+          <input type="hidden" name="from_name" value={FORM.fromName} />
+          <input type="hidden" name="page_language" value={locale} />
+          <!-- Honeypot: bots tick visible checkboxes; humans never see this one -->
+          <input type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" class="hidden" aria-hidden="true" />
+
+          <label class="block">
+            <span class="text-xs font-semibold tracking-[0.14em] text-ink-600 uppercase">{t.contact.nameLabel}</span>
+            <input required name="name" type="text" autocomplete="name"
+              class="mt-1.5 w-full rounded-lg border border-ink-900/15 bg-cream-50 px-3 py-2.5 text-sm focus:border-clay-500 focus:outline-hidden focus:ring-2 focus:ring-clay-500/30" />
+          </label>
+          <label class="block">
+            <span class="text-xs font-semibold tracking-[0.14em] text-ink-600 uppercase">{t.contact.phoneLabel}</span>
+            <input required name="phone" type="tel" autocomplete="tel"
+              class="mt-1.5 w-full rounded-lg border border-ink-900/15 bg-cream-50 px-3 py-2.5 text-sm focus:border-clay-500 focus:outline-hidden focus:ring-2 focus:ring-clay-500/30" />
+          </label>
+          <label class="block sm:col-span-2">
+            <span class="text-xs font-semibold tracking-[0.14em] text-ink-600 uppercase">{t.contact.emailLabel}</span>
+            <input name="email" type="email" autocomplete="email"
+              class="mt-1.5 w-full rounded-lg border border-ink-900/15 bg-cream-50 px-3 py-2.5 text-sm focus:border-clay-500 focus:outline-hidden focus:ring-2 focus:ring-clay-500/30" />
+          </label>
+          <label class="block">
+            <span class="text-xs font-semibold tracking-[0.14em] text-ink-600 uppercase">{t.contact.typeLabel}</span>
+            <select name="type"
+              class="mt-1.5 w-full rounded-lg border border-ink-900/15 bg-cream-50 px-3 py-2.5 text-sm focus:border-clay-500 focus:outline-hidden focus:ring-2 focus:ring-clay-500/30">
+              {t.contact.typeOptions.map((option) => <option>{option}</option>)}
+            </select>
+          </label>
+          <label class="block">
+            <span class="text-xs font-semibold tracking-[0.14em] text-ink-600 uppercase">{t.contact.budgetLabel}</span>
+            <select name="budget"
+              class="mt-1.5 w-full rounded-lg border border-ink-900/15 bg-cream-50 px-3 py-2.5 text-sm focus:border-clay-500 focus:outline-hidden focus:ring-2 focus:ring-clay-500/30">
+              {t.contact.budgetOptions.map((option) => <option>{option}</option>)}
+            </select>
+          </label>
+          <label class="block sm:col-span-2">
+            <span class="text-xs font-semibold tracking-[0.14em] text-ink-600 uppercase">{t.contact.messageLabel}</span>
+            <textarea required name="message" rows="5" placeholder={t.contact.messagePlaceholder}
+              class="mt-1.5 w-full rounded-lg border border-ink-900/15 bg-cream-50 px-3 py-2.5 text-sm focus:border-clay-500 focus:outline-hidden focus:ring-2 focus:ring-clay-500/30"></textarea>
+          </label>
+          <label class="flex items-start gap-3 sm:col-span-2">
+            <input required type="checkbox" name="consent"
+              class="mt-0.5 h-4 w-4 rounded border-ink-900/25 accent-clay-600" />
+            <span class="text-sm text-ink-600">{t.contact.consent}</span>
+          </label>
+          <div class="sm:col-span-2">
+            <button type="submit" id="form-submit" class="btn-primary w-full sm:w-auto">{t.contact.send}</button>
+            <p id="form-note" role="status" class="mt-3 hidden text-sm"></p>
+          </div>
+        </form>
+      </div>
+
+      <!-- Details -->
+      <aside class="reveal space-y-8">
+        <div>
+          <h2 class="font-display text-2xl text-ink-900">{t.contact.studioHeading}</h2>
+          <p class="mt-3 text-ink-600">{SITE.address}</p>
+          <p class="mt-1 text-ink-600">{t.footer.hours}</p>
+        </div>
+        <div>
+          <h2 class="font-display text-2xl text-ink-900">{t.contact.directHeading}</h2>
+          <p class="mt-3">
+            <a class="text-clay-600 hover:text-clay-700" href={`tel:${SITE.phone.replace(/\s/g, '')}`}>{SITE.phone}</a>
+          </p>
+          <p>
+            <a class="text-clay-600 hover:text-clay-700" href={`mailto:${SITE.email}`}>{SITE.email}</a>
+          </p>
+        </div>
+        <div class="rounded-xl bg-cream-100 p-6 text-sm leading-relaxed text-ink-600">
+          <p class="font-semibold text-ink-900">{t.contact.visitingHeading}</p>
+          <p class="mt-2">{t.contact.visitingText}</p>
+        </div>
+      </aside>
+    </div>
+  </section>
+</Base>
+
+<script>
+  // Submissions POST JSON to a Web3Forms-compatible endpoint and land in the
+  // studio's admin inbox (access key is public-safe; set PUBLIC_FORM_ACCESS_KEY).
+  // All user-facing messages arrive via data-msg-* attributes (locale-aware).
+  const form = document.getElementById('contact-form') as HTMLFormElement;
+  const note = document.getElementById('form-note')!;
+  const submitBtn = document.getElementById('form-submit') as HTMLButtonElement;
+  const loadedAt = Date.now();
+
+  const fill = (template: string) =>
+    template
+      .replace('{email}', form.dataset.fallbackEmail ?? '')
+      .replace('{phone}', form.dataset.fallbackPhone ?? '');
+
+  const showNote = (message: string, isError: boolean) => {
+    note.textContent = message;
+    note.classList.remove('hidden');
+    note.classList.toggle('text-ink-900', isError);
+    note.classList.toggle('border-l-2', isError);
+    note.classList.toggle('border-clay-600', isError);
+    note.classList.toggle('pl-3', isError);
+    note.classList.toggle('text-clay-700', !isError);
+  };
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    if (form.dataset.configured !== 'true') {
+      showNote(fill(form.dataset.msgUnconfigured ?? ''), true);
+      return;
+    }
+
+    // Time-trap: humans take longer than 3s to fill this in.
+    if (Date.now() - loadedAt < 3000) {
+      showNote(form.dataset.msgBot ?? '', false); // silently drop bots
+      return;
+    }
+
+    const data = Object.fromEntries(new FormData(form).entries());
+
+    submitBtn.disabled = true;
+    submitBtn.setAttribute('aria-busy', 'true');
+    submitBtn.textContent = form.dataset.msgSending ?? 'Sending…';
+    note.classList.add('hidden');
+
+    try {
+      const res = await fetch(form.dataset.endpoint!, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify(data),
+      });
+      const json = await res.json();
+      if (res.ok && json.success) {
+        form.reset();
+        showNote(form.dataset.msgSuccess ?? '', false);
+      } else {
+        showNote(form.dataset.msgError ?? '', true);
+      }
+    } catch {
+      showNote(form.dataset.msgNoConnection ?? '', true);
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.removeAttribute('aria-busy');
+      submitBtn.textContent = submitBtn.dataset.originalLabel ?? '';
+    }
+  });
+
+  // Remember the locale-rendered button label for the restore above.
+  submitBtn?.setAttribute('data-original-label', submitBtn.textContent);
+
+  // Client-side validation messaging with the built-in UI disabled above.
+  form?.addEventListener('invalid', (e) => {
+    const field = e.target as HTMLElement;
+    field.setAttribute('aria-invalid', 'true');
+    (field as HTMLInputElement | HTMLTextAreaElement).focus();
+  }, true);
+  form?.addEventListener('input', (e) => {
+    const field = e.target as HTMLElement;
+    if (field.matches(':valid')) field.removeAttribute('aria-invalid');
+  }, true);
+</script>

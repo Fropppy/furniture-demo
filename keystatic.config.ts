@@ -141,12 +141,35 @@ const projects = collection({
     }),
     featured: fields.checkbox({ label: 'Featured on home hero', defaultValue: false }),
     order: fields.integer({ label: 'Sort order', defaultValue: 99 }),
+    // Vietnamese fields — the VI site falls back to the EN value per-field
+    // when these are empty, so none of them are required.
+    titleVi: fields.text({ label: 'Title (VI)' }),
+    summaryVi: fields.text({
+      label: 'Summary (VI)',
+      validation: { length: { max: 320 } },
+      multiline: true,
+    }),
+    clientVi: fields.text({ label: 'Client (VI)' }),
+    locationVi: fields.text({ label: 'Location (VI)' }),
+    budgetVi: fields.text({ label: 'Investment (VI, e.g. “8,5 tỷ VND”)' }),
+    servicesVi: fields.array(fields.text({ label: 'Service (VI)' }), {
+      label: 'Services (VI)',
+      itemLabel: (props) => props.value || 'Dịch vụ',
+    }),
     seoTitle: fields.text({
       label: 'SEO title override (≤ 60 chars)',
       validation: { length: { max: 60 } },
     }),
     seoDescription: fields.text({
       label: 'SEO meta description override (~150–160 chars)',
+      validation: { length: { max: 200 } },
+    }),
+    seoTitleVi: fields.text({
+      label: 'SEO title (VI, ≤ 60 chars)',
+      validation: { length: { max: 60 } },
+    }),
+    seoDescriptionVi: fields.text({
+      label: 'SEO meta description (VI, ~150–160 chars)',
       validation: { length: { max: 200 } },
     }),
     content: fields.markdoc({
@@ -181,6 +204,12 @@ const posts = collection({
     }),
     date: fields.date({ label: 'Date', validation: { isRequired: true } }),
     tag: fields.text({ label: 'Tag', defaultValue: 'Journal' }),
+    titleVi: fields.text({ label: 'Title (VI)' }),
+    excerptVi: fields.text({
+      label: 'Excerpt (VI)',
+      validation: { length: { max: 320 } },
+      multiline: true,
+    }),
     seoTitle: fields.text({
       label: 'SEO title override (≤ 60 chars)',
       validation: { length: { max: 60 } },

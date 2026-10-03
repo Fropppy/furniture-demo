@@ -38,8 +38,12 @@ export function safeJson(value: unknown): string {
  * Shared date formatting (en-GB, e.g. "12 August 2025") so journal listings,
  * article pages and the home teaser stay identical.
  */
-export function formatDate(d: Date): string {
-  return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+export function formatDate(d: Date, locale: Locale = 'en'): string {
+  return d.toLocaleDateString(locale === 'vi' ? 'vi-VN' : 'en-GB', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  });
 }
 
 /**
@@ -55,11 +59,19 @@ export const FORM = {
   subject: 'New project enquiry — forma website',
 };
 
+/**
+ * Site locales: EN is the default (unprefixed URLs), VI lives under /vi/…
+ * See src/lib/i18n.ts for the UI-string dictionary and helpers.
+ */
+export type Locale = 'en' | 'vi';
+export const LOCALES = ['en', 'vi'] as const;
+export const DEFAULT_LOCALE: Locale = 'en';
+
 export const CATEGORIES = {
-  residential: 'Residential',
-  hospitality: 'Hospitality',
-  office: 'Workplace',
-  retail: 'Retail',
+  residential: { en: 'Residential', vi: 'Dân dụng' },
+  hospitality: { en: 'Hospitality', vi: 'Khách sạn – nhà hàng' },
+  office: { en: 'Workplace', vi: 'Văn phòng' },
+  retail: { en: 'Retail', vi: 'Bán lẻ' },
 } as const;
 
 export type CategoryKey = keyof typeof CATEGORIES;
@@ -75,11 +87,11 @@ export const STYLE_TAGS = [
 
 export type AreaBand = 'under-150' | '150-400' | '400-1000' | 'over-1000';
 
-export const AREA_BANDS: { value: AreaBand; label: string }[] = [
-  { value: 'under-150', label: 'Under 150 m²' },
-  { value: '150-400', label: '150 – 400 m²' },
-  { value: '400-1000', label: '400 – 1,000 m²' },
-  { value: 'over-1000', label: 'Over 1,000 m²' },
+export const AREA_BANDS: { value: AreaBand; label: Record<Locale, string> }[] = [
+  { value: 'under-150', label: { en: 'Under 150 m²', vi: 'Dưới 150 m²' } },
+  { value: '150-400', label: { en: '150 – 400 m²', vi: '150 – 400 m²' } },
+  { value: '400-1000', label: { en: '400 – 1,000 m²', vi: '400 – 1.000 m²' } },
+  { value: 'over-1000', label: { en: 'Over 1,000 m²', vi: 'Trên 1.000 m²' } },
 ];
 
 export function areaBand(area: number): AreaBand {

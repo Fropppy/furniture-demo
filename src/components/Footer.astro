@@ -1,6 +1,13 @@
 ---
-import { SITE, CATEGORIES, withBase } from '../lib/site';
+import { SITE, CATEGORIES, withBase, type Locale } from '../lib/site';
+import { UI } from '../lib/i18n';
 
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = 'en' } = Astro.props;
+const t = UI[locale];
 const year = new Date().getFullYear();
 ---
 
@@ -11,7 +18,7 @@ const year = new Date().getFullYear();
         FORMA<span class="text-clay-400">.</span>
       </p>
       <p class="mt-4 text-sm leading-relaxed text-cream-200/70">
-        {SITE.description}
+        {t.meta.home.description}
       </p>
       <div class="mt-6 flex gap-4 text-sm">
         {
@@ -29,24 +36,24 @@ const year = new Date().getFullYear();
       </div>
     </div>
 
-    <nav aria-label="Footer">
-      <p class="text-xs font-semibold tracking-[0.2em] text-clay-300 uppercase">Explore</p>
+    <nav aria-label={t.footer.explore}>
+      <p class="text-xs font-semibold tracking-[0.2em] text-clay-300 uppercase">{t.footer.explore}</p>
       <ul class="mt-5 space-y-3 text-sm">
-        <li><a class="text-cream-200/70 hover:text-cream-50" href={withBase('/projects/')}>All projects</a></li>
-        <li><a class="text-cream-200/70 hover:text-cream-50" href={withBase('/about/')}>Studio</a></li>
-        <li><a class="text-cream-200/70 hover:text-cream-50" href={withBase('/journal/')}>Journal</a></li>
-        <li><a class="text-cream-200/70 hover:text-cream-50" href={withBase('/contact/')}>Contact</a></li>
+        <li><a class="text-cream-200/70 hover:text-cream-50" href={withBase('/projects/')}>{t.footer.allProjects}</a></li>
+        <li><a class="text-cream-200/70 hover:text-cream-50" href={withBase('/about/')}>{t.nav.studio}</a></li>
+        <li><a class="text-cream-200/70 hover:text-cream-50" href={withBase('/journal/')}>{t.nav.journal}</a></li>
+        <li><a class="text-cream-200/70 hover:text-cream-50" href={withBase('/contact/')}>{t.nav.contact}</a></li>
       </ul>
     </nav>
 
-    <nav aria-label="Practice areas">
-      <p class="text-xs font-semibold tracking-[0.2em] text-clay-300 uppercase">Practice</p>
+    <nav aria-label={t.footer.practice}>
+      <p class="text-xs font-semibold tracking-[0.2em] text-clay-300 uppercase">{t.footer.practice}</p>
       <ul class="mt-5 space-y-3 text-sm">
         {
-          Object.entries(CATEGORIES).map(([key, label]) => (
+          Object.entries(CATEGORIES).map(([key, labels]) => (
             <li>
               <a class="text-cream-200/70 hover:text-cream-50" href={withBase(`/projects/?category=${key}`)}>
-                {label}
+                {labels[locale]}
               </a>
             </li>
           ))
@@ -55,7 +62,7 @@ const year = new Date().getFullYear();
     </nav>
 
     <div>
-      <p class="text-xs font-semibold tracking-[0.2em] text-clay-300 uppercase">Contact</p>
+      <p class="text-xs font-semibold tracking-[0.2em] text-clay-300 uppercase">{t.footer.contact}</p>
       <ul class="mt-5 space-y-3 text-sm text-cream-200/70">
         <li>{SITE.address}</li>
         <li>
@@ -64,7 +71,7 @@ const year = new Date().getFullYear();
         <li>
           <a class="hover:text-cream-50" href={`mailto:${SITE.email}`}>{SITE.email}</a>
         </li>
-        <li>Mon – Sat, 8:30 – 18:00</li>
+        <li>{t.footer.hours}</li>
       </ul>
     </div>
   </div>
@@ -73,8 +80,8 @@ const year = new Date().getFullYear();
     <div
       class="container-x flex flex-col items-center justify-between gap-3 py-6 text-xs text-cream-200/50 sm:flex-row"
     >
-      <p>© {year} {SITE.name}. All rights reserved.</p>
-      <p>Interior · Furniture · Design–Build</p>
+      <p>© {year} {SITE.name}. {t.footer.rights}</p>
+      <p>{t.footer.byline}</p>
     </div>
   </div>
 </footer>

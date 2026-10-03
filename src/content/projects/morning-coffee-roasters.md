@@ -14,6 +14,12 @@ hue: 32
 featured: true
 order: 2
 gallery: [cafe, lounge, facade, dining]
+titleVi: Morning Coffee Roasters
+summaryVi: Quán cà phê specialty 140 m² lấy máy rang làm trung tâm, bọc trong ốp gỗ ash, thép chải và trò chơi ánh sáng đèn thả ấm áp được tính toán kỹ.
+clientVi: Morning Coffee Co.
+locationVi: Tây Hồ, Hà Nội
+budgetVi: 3,2 tỷ VND
+servicesVi: [Thiết kế nội thất, Nội thất theo yêu cầu, Phối hợp nhận diện thương hiệu]
 ---
 
 ## The brief

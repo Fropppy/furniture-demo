@@ -2,15 +2,20 @@
 import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
 import Placeholder from './Placeholder.astro';
-import { CATEGORIES, areaBand, withBase } from '../lib/site';
+import { CATEGORIES, areaBand, withBase, type Locale } from '../lib/site';
+import { UI, pick } from '../lib/i18n';
 
 interface Props {
   project: CollectionEntry<'projects'>;
+  locale?: Locale;
 }
 
-const { project } = Astro.props;
+const { project, locale = 'en' } = Astro.props;
 const { data } = project;
-const href = withBase(`/projects/${project.id}/`);
+const t = UI[locale];
+const href = withBase(`${locale === 'vi' ? '/vi' : ''}/projects/${project.id}/`);
+const title = pick(locale, data.title, data.titleVi);
+const location = pick(locale, data.location, data.locationVi);
 ---
 
 <article
@@ -34,7 +39,7 @@ const href = withBase(`/projects/${project.id}/`);
           <Placeholder
             scene={data.scene}
             hue={data.hue}
-            alt={`${data.title} — ${CATEGORIES[data.category]} project`}
+            alt={locale === 'vi' ? `${title} — dự án ${CATEGORIES[data.category][locale].toLowerCase()}` : `${title} — ${CATEGORIES[data.category].en} project`}
             class="h-full w-full transition-transform duration-500 ease-out group-hover:scale-[1.04]"
           />
         )
@@ -43,13 +48,16 @@ const href = withBase(`/projects/${project.id}/`);
   </a>
   <div class="mt-4">
     <p class="text-xs font-semibold tracking-[0.18em] text-clay-600 uppercase">
-      {CATEGORIES[data.category]} · {data.year}
+      {CATEGORIES[data.category][locale]} · {data.year}
     </p>
     <h3 class="mt-1.5 font-display text-xl text-ink-900">
-      <a href={href} class="transition-colors hover:text-clay-600">{data.title}</a>
+      <a href={href} class="transition-colors hover:text-clay-600">{title}</a>
     </h3>
     <p class="mt-1 text-sm text-ink-500">
-      {data.location} · {data.area} m² · {data.style}
+      {t.projects.cardMetaTemplate
+        .replace('{location}', location)
+        .replace('{area}', String(data.area))
+        .replace('{style}', data.style)}
     </p>
   </div>
 </article>

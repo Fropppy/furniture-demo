@@ -1,17 +1,29 @@
 ---
-import { SITE, withBase } from '../lib/site';
+import { SITE, withBase, type Locale } from '../lib/site';
+import { switchLocalePath, UI } from '../lib/i18n';
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = 'en' } = Astro.props;
+const t = UI[locale];
 
 const links = [
-  { href: withBase('/projects/'), label: 'Projects' },
-  { href: withBase('/about/'), label: 'Studio' },
-  { href: withBase('/journal/'), label: 'Journal' },
-  { href: withBase('/contact/'), label: 'Contact' },
+  { href: withBase('/projects/'), label: t.nav.projects },
+  { href: withBase('/about/'), label: t.nav.studio },
+  { href: withBase('/journal/'), label: t.nav.journal },
+  { href: withBase('/contact/'), label: t.nav.contact },
 ];
 
 const path = Astro.url.pathname;
 const homeHref = withBase('/');
 const isActive = (href: string) =>
   href === homeHref ? path === homeHref : path.startsWith(href.replace(/\/$/, ''));
+
+// Language toggle: same page in the other locale (query string preserved).
+const other: Locale = locale === 'vi' ? 'en' : 'vi';
+const switchHref = switchLocalePath(Astro.url, other);
 ---
 
 <header
@@ -42,7 +54,21 @@ const isActive = (href: string) =>
           </a>
         ))
       }
-      <a href={withBase('/contact/')} class="btn-primary px-5! py-2.5!">Start a project</a>
+      <a href={withBase('/contact/')} class="btn-primary px-5! py-2.5!">{t.nav.startProject}</a>
+      <nav class="flex items-center gap-1 rounded-full border border-ink-900/10 p-0.5 text-xs font-semibold" aria-label={t.nav.language}>
+        <a
+          href={switchLocalePath(Astro.url, 'en')}
+          hreflang="en"
+          class:list={['rounded-full px-2 py-1 transition-colors', locale === 'en' ? 'bg-ink-900 text-cream-50' : 'text-ink-600 hover:text-ink-900']}
+          aria-current={locale === 'en' ? 'true' : undefined}
+        >EN</a>
+        <a
+          href={switchHref}
+          hreflang="vi"
+          class:list={['rounded-full px-2 py-1 transition-colors', locale === 'vi' ? 'bg-ink-900 text-cream-50' : 'text-ink-600 hover:text-ink-900']}
+          aria-current={locale === 'vi' ? 'true' : undefined}
+        >VI</a>
+      </nav>
     </nav>
 
     <button
@@ -50,7 +76,7 @@ const isActive = (href: string) =>
       class="flex h-10 w-10 flex-col items-center justify-center gap-1.5 md:hidden"
       aria-expanded="false"
       aria-controls="mobile-menu"
-      aria-label="Toggle menu"
+      aria-label={t.nav.toggleMenu}
     >
       <span class="h-0.5 w-6 rounded bg-ink-900 transition-transform"></span>
       <span class="h-0.5 w-6 rounded bg-ink-900 transition-opacity"></span>
@@ -74,7 +100,22 @@ const isActive = (href: string) =>
         </a>
       ))
     }
-    <a href={withBase('/contact/')} class="btn-primary mt-4 w-full">Start a project</a>
+    <a href={withBase('/contact/')} class="btn-primary mt-4 w-full">{t.nav.startProject}</a>
+    <nav class="mt-3 flex items-center gap-2 text-sm" aria-label={t.nav.language}>
+      <a
+        href={switchLocalePath(Astro.url, 'en')}
+        hreflang="en"
+        class:list={['font-semibold', locale === 'en' ? 'text-ink-900 underline underline-offset-4' : 'text-ink-500']}
+        aria-current={locale === 'en' ? 'true' : undefined}
+      >English</a>
+      <span aria-hidden="true" class="text-ink-900/25">·</span>
+      <a
+        href={switchHref}
+        hreflang="vi"
+        class:list={['font-semibold', locale === 'vi' ? 'text-ink-900 underline underline-offset-4' : 'text-ink-500']}
+        aria-current={locale === 'vi' ? 'true' : undefined}
+      >Tiếng Việt</a>
+    </nav>
   </nav>
 </header>
 

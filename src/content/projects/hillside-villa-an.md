@@ -14,6 +14,12 @@ hue: 150
 featured: true
 order: 1
 gallery: [living, bedroom, dining, kitchen, facade]
+titleVi: Biệt thự An
+summaryVi: Biệt thự gia đình đúc bậc theo sườn đồi thông ở Đà Lạt, mở mọi không gian sống ra thung lũng bằng kính toàn chiều cao và đồ mộc gỗ ấm áp.
+clientVi: Khách hàng tư nhân
+locationVi: Đà Lạt, Lâm Đồng
+budgetVi: 8,5 tỷ VND
+servicesVi: [Thiết kế ý tưởng, Thiết kế nội thất, Nội thất theo yêu cầu, Giám sát thi công]
 ---
 
 ## The brief

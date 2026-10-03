@@ -13,6 +13,12 @@ scene: office
 hue: 30
 order: 8
 gallery: [office, living, dining, bedroom, facade]
+titleVi: Showroom Atelier 24
+summaryVi: Showroom nội thất nằm trong một nhà in cũ được cải tạo — 380 m² không gian thô, kệ thép mạch lạc và các món đồ từ xưởng của chúng tôi được trưng bày như tác phẩm điêu khắc.
+clientVi: Atelier 24
+locationVi: Long Biên, Hà Nội
+budgetVi: 4,5 tỷ VND
+servicesVi: [Thiết kế nội thất, Thiết kế trưng bày, Nội thất theo yêu cầu]
 ---
 
 ## The brief

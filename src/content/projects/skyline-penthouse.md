@@ -13,6 +13,11 @@ hue: 220
 featured: true
 order: 3
 gallery: [living, bedroom, office, dining]
+titleVi: Penthouse Skyline
+summaryVi: Penthouse thông tầng cho một cặp đôi sưu tầm nghệ thuật — tường trung tính như phòng gallery và kho chứa ẩn để tác phẩm cùng tầm nhìn thành phố làm chủ không gian.
+clientVi: Khách hàng tư nhân
+locationVi: Quận 1, TP. Hồ Chí Minh
+servicesVi: [Thiết kế nội thất, Bố trí tác phẩm nghệ thuật, Nội thất theo yêu cầu]
 ---
 
 ## The brief

@@ -3,23 +3,26 @@ import '../styles/global.css';
 import Seo from '../components/Seo.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import { HTML_LANG } from '../lib/i18n';
+import { DEFAULT_LOCALE, type Locale } from '../lib/site';
 
 interface Props {
   title: string;
   description?: string;
   noIndex?: boolean;
+  locale?: Locale;
 }
 
-const { title, description, noIndex } = Astro.props;
+const { title, description, noIndex, locale = DEFAULT_LOCALE } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={HTML_LANG[locale]}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
-    <Seo {title} {description} {noIndex} />
+    <Seo {title} {description} {noIndex} {locale} />
     <slot name="seo" />
   </head>
   <body class="flex min-h-screen flex-col">
@@ -29,11 +32,11 @@ const { title, description, noIndex } = Astro.props;
     >
       Skip to content
     </a>
-    <Header />
+    <Header {locale} />
     <main id="main" class="flex-1 pt-16 lg:pt-20">
       <slot />
     </main>
-    <Footer />
+    <Footer {locale} />
 
     <script>
       const revealables = document.querySelectorAll('.reveal');

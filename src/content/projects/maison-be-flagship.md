@@ -13,6 +13,12 @@ scene: facade
 hue: 20
 order: 6
 gallery: [facade, living, office]
+titleVi: Cửa hàng Maison Be
+summaryVi: Cửa hàng thời trang treo quần áo trong không gian hốc vòm, bệ đá travertine và ánh sáng ban ngày dịu nhẹ — bán lẻ như một phòng trưng bày nghệ thuật.
+clientVi: Maison Be
+locationVi: Quận 3, TP. Hồ Chí Minh
+budgetVi: 7 tỷ VND
+servicesVi: [Thiết kế nội thất, Nội thất theo yêu cầu, Thiết kế hệ thống trưng bày]
 ---
 
 ## The brief

@@ -13,6 +13,12 @@ scene: office
 hue: 205
 order: 4
 gallery: [office, lounge, cafe, living]
+titleVi: Văn phòng Ivory Loft
+summaryVi: Văn phòng 450 m² của một agency sáng tạo trong kho dệt cũ — các pod họp làm từ gỗ dán birch dưới hệ dầm thép nguyên bản.
+clientVi: Ivory Agency
+locationVi: Bình Thạnh, TP. Hồ Chí Minh
+budgetVi: 6 tỷ VND
+servicesVi: [Thiết kế nội thất, Nội thất theo yêu cầu, Thiết kế âm học]
 ---
 
 ## The brief

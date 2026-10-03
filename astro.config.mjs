@@ -27,6 +27,13 @@ export default defineConfig({
     layout: 'constrained',
     responsiveStyles: true,
   },
+  // EN unprefixed (default), VI under /vi/… — routing is manual: shared page
+  // components render from src/pages/ and src/pages/vi/ with a locale prop.
+  i18n: {
+    defaultLocale: 'en',
+    locales: ['en', 'vi'],
+    routing: { prefixDefaultLocale: false },
+  },
   integrations: [
     sitemap({ filter: (page) => !page.endsWith('/rss.xml') }),
     react(),

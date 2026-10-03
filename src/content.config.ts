@@ -26,6 +26,9 @@ const seoDescription = z.preprocess(
   (v) => (typeof v === 'string' && v.trim() ? v.trim() : undefined),
   z.string().max(200).optional(),
 );
+// VI variants: same blank-tolerant preprocessing; empty falls back to EN.
+const seoTitleVi = seoTitle;
+const seoDescriptionVi = seoDescription;
 
 const projects = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/projects' }),
@@ -71,8 +74,17 @@ const projects = defineCollection({
         .optional(),
       featured: z.boolean().default(false),
       order: z.number().default(99),
+      // Vietnamese fields (site default is EN; VI pages fall back per-field)
+      titleVi: z.string().optional(),
+      summaryVi: z.string().optional(),
+      clientVi: z.string().optional(),
+      locationVi: z.string().optional(),
+      budgetVi: z.string().optional(),
+      servicesVi: z.array(z.string()).optional(),
       seoTitle,
       seoDescription,
+      seoTitleVi,
+      seoDescriptionVi,
     }),
 });
 
@@ -83,8 +95,12 @@ const posts = defineCollection({
     excerpt: z.string(),
     date: z.coerce.date(),
     tag: z.string().default('Journal'),
+    titleVi: z.string().optional(),
+    excerptVi: z.string().optional(),
     seoTitle,
     seoDescription,
+    seoTitleVi,
+    seoDescriptionVi,
   }),
 });
 

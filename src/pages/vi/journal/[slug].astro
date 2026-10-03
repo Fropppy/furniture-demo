@@ -1,0 +1,12 @@
+---
+import JournalPostPage from '../../../components/pages/JournalPostPage.astro';
+import { postStaticPaths } from '../../../lib/paths';
+
+export async function getStaticPaths() {
+  return postStaticPaths();
+}
+
+const { post } = Astro.props;
+---
+
+<JournalPostPage post={post} locale="vi" />

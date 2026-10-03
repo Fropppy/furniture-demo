@@ -1,0 +1,62 @@
+---
+import { render, type CollectionEntry } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { SITE, formatDate, safeJson, withBase, type Locale } from '../../lib/site';
+import { pick } from '../../lib/i18n';
+import { HTML_LANG, UI } from '../../lib/i18n';
+
+interface Props {
+  post: CollectionEntry<'posts'>;
+  locale: Locale;
+}
+
+const { post, locale } = Astro.props;
+const { Content } = await render(post);
+const t = UI[locale];
+const prefix = locale === 'vi' ? '/vi' : '';
+
+const title = pick(locale, post.data.title, post.data.titleVi);
+const excerpt = pick(locale, post.data.excerpt, post.data.excerptVi);
+
+const articleSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: title,
+  description: excerpt,
+  inLanguage: HTML_LANG[locale],
+  datePublished: post.data.date.toISOString(),
+  author: { '@type': 'Organization', name: SITE.name },
+  publisher: { '@type': 'Organization', name: SITE.name },
+  mainEntityOfPage: new URL(withBase(`${prefix}/journal/${post.id}/`), Astro.site),
+};
+---
+
+<Base
+  title={locale === 'vi' && post.data.seoTitleVi?.trim() ? post.data.seoTitleVi : post.data.seoTitle ?? title}
+  description={post.data.seoDescription ?? excerpt}
+  {locale}
+>
+  <script
+    type="application/ld+json"
+    set:html={safeJson(articleSchema)}
+    slot="seo"
+  />
+  <article class="py-14 lg:py-20">
+    <div class="container-x mx-auto max-w-3xl">
+      <p class="eyebrow reveal">
+        {post.data.tag} · {formatDate(post.data.date, locale)}
+      </p>
+      <h1 class="reveal mt-3 font-display text-3xl text-ink-900 sm:text-4xl lg:text-5xl">
+        {title}
+      </h1>
+      <div class="prose-brand mt-10">
+        <Content />
+      </div>
+      <div class="mt-16 border-t border-ink-900/10 pt-8">
+        <a href={withBase(`${prefix}/journal/`)} class="text-sm font-semibold text-clay-600 hover:text-clay-700">
+          {t.journal.allArticles}
+        </a>
+      </div>
+    </div>
+  </article>
+</Base>

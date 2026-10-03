@@ -13,6 +13,12 @@ scene: lounge
 hue: 285
 order: 5
 gallery: [lounge, cafe, dining, facade]
+titleVi: Luna Lounge Bar
+summaryVi: Không gian về đêm từ gỗ óc chó, đồng và ánh hổ phách dịu — quầy lounge 260 m² được tinh chỉnh để trò chuyện ở quầy và sống động ở phía sau.
+clientVi: Luna Group
+locationVi: An Thượng, Đà Nẵng
+budgetVi: 5,5 tỷ VND
+servicesVi: [Thiết kế nội thất, Thiết kế ánh sáng, Nội thất theo yêu cầu]
 ---
 
 ## The brief

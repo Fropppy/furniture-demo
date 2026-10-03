@@ -13,6 +13,12 @@ scene: facade
 hue: 100
 order: 7
 gallery: [facade, bedroom, cafe, living]
+titleVi: Homestay Palm Courtyard
+summaryVi: Mười một phòng nghỉ quanh sân vườn rợp bóng ở Hội An — homestay xây từ chất liệu bản địa của phố cổ — vôi vữa, gạch và gỗ sẫm màu.
+clientVi: Palm Hospitality
+locationVi: Hội An, Quảng Nam
+budgetVi: 9 tỷ VND
+servicesVi: [Thiết kế ý tưởng, Thiết kế nội thất, Nội thất theo yêu cầu, Phối hợp cảnh quan]
 ---
 
 ## The brief
