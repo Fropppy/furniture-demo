@@ -7,6 +7,7 @@ style: Modern Luxury
 location: District 1, Ho Chi Minh City
 area: 210
 year: 2024
+budget: 7.5 billion VND
 services: [Interior design, Art placement, Custom furniture]
 scene: living
 hue: 220
@@ -17,12 +18,13 @@ titleVi: Penthouse Skyline
 summaryVi: Penthouse thông tầng cho một cặp đôi sưu tầm nghệ thuật — tường trung tính như phòng gallery và kho chứa ẩn để tác phẩm cùng tầm nhìn thành phố làm chủ không gian.
 clientVi: Khách hàng tư nhân
 locationVi: Quận 1, TP. Hồ Chí Minh
+budgetVi: 7,5 tỷ VND
 servicesVi: [Thiết kế nội thất, Bố trí tác phẩm nghệ thuật, Nội thất theo yêu cầu]
 ---
 
 ## The brief
 
-Two floors, a serious art collection, and a request for "rooms that disappear." The couple entertains monthly and wanted open flow without theecho of an empty gallery — warmth had to come from materials, not clutter.
+Two floors, a serious art collection, and a request for "rooms that disappear." The couple entertains monthly and wanted open flow without the echo of an empty gallery — warmth had to come from materials, not clutter.
 
 ## The concept
 

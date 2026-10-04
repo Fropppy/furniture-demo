@@ -89,6 +89,13 @@ body {
     scroll-behavior: auto;
   }
 }
+@media print {
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none;
+  }
+}
 
 /* ---- Article prose (project write-ups, journal) ---- */
 .prose-brand {

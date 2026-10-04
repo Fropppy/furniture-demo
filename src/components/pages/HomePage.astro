@@ -5,8 +5,7 @@ import Base from '../../layouts/Base.astro';
 import Placeholder from '../Placeholder.astro';
 import ProjectCard from '../ProjectCard.astro';
 import { CATEGORIES, formatDate, withBase, type Locale } from '../../lib/site';
-import { pick } from '../../lib/i18n';
-import { UI } from '../../lib/i18n';
+import { UI, pick } from '../../lib/i18n';
 
 interface Props {
   locale: Locale;
@@ -131,10 +130,10 @@ const prefix = locale === 'vi' ? '/vi' : '';
       </div>
 
       <div class="mt-10 flex flex-wrap gap-2 reveal" role="group" aria-label={t.home.filterGroup}>
-        <button class="work-tab btn bg-ink-900 text-cream-50" data-filter="all">{t.home.all}</button>
+        <button class="work-tab btn bg-ink-900 text-cream-50" data-filter="all" aria-pressed="true">{t.home.all}</button>
         {
           Object.entries(CATEGORIES).map(([key, labels]) => (
-            <button class="work-tab btn border border-ink-800/15 text-ink-700 hover:border-ink-800/40" data-filter={key}>
+            <button class="work-tab btn border border-ink-800/15 text-ink-700 hover:border-ink-800/40" data-filter={key} aria-pressed="false">
               {labels[locale]}
             </button>
           ))
@@ -235,38 +234,61 @@ const prefix = locale === 'vi' ? '/vi' : '';
 </Base>
 
 <script>
-  import Swiper from 'swiper';
-  import { A11y, Autoplay, EffectFade, Pagination } from 'swiper/modules';
-  import 'swiper/css';
-  import 'swiper/css/effect-fade';
-  import 'swiper/css/pagination';
+  // Swiper ships out of the critical path: the chunk loads at idle, or on the
+  // first hover/touch/focus over the hero so it's bound before a swipe.
+  let heroStarted = false;
+  async function initHeroSwiper() {
+    if (heroStarted) return;
+    heroStarted = true;
+    const { default: Swiper } = await import('swiper');
+    const { A11y, Autoplay, EffectFade, Pagination } = await import('swiper/modules');
+    // One CSS import, not three: Vite 8 emits only the first CSS asset when
+    // multiple dynamic CSS imports share a chunk, 404ing the rest and rejecting
+    // this chain (hero never initialized). /css/bundle = core + modules + effects.
+    await import('swiper/css/bundle');
 
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  const swiper = new Swiper('.hero-swiper', {
-    modules: [A11y, Autoplay, EffectFade, Pagination],
-    effect: 'fade',
-    fadeEffect: { crossFade: true },
-    loop: true,
-    speed: prefersReducedMotion ? 0 : 900,
-    autoplay: { delay: 6000, disableOnInteraction: false },
-    pagination: { el: '.hero-pagination', clickable: true, bulletElement: 'button' },
-    a11y: { containerMessage: document.querySelector<HTMLElement>('.hero-swiper')?.getAttribute('data-a11y-message') ?? 'Featured projects slideshow' },
-  });
+    const swiper = new Swiper('.hero-swiper', {
+      modules: [A11y, Autoplay, EffectFade, Pagination],
+      effect: 'fade',
+      fadeEffect: { crossFade: true },
+      loop: true,
+      speed: prefersReducedMotion ? 0 : 900,
+      autoplay: { delay: 6000, disableOnInteraction: false },
+      pagination: { el: '.hero-pagination', clickable: true, bulletElement: 'button' },
+      a11y: { containerMessage: document.querySelector<HTMLElement>('.hero-swiper')?.getAttribute('data-a11y-message') ?? 'Featured projects slideshow' },
+    });
 
-  // WCAG 2.2.2: autoplay must be pausable by the user, and never starts
-  // automatically for reduced-motion users. The button toggles it either way.
-  const pauseBtn = document.getElementById('hero-pause');
-  const setPaused = (paused: boolean) => {
-    if (paused) swiper.autoplay.stop();
-    else swiper.autoplay.start();
-    const label = paused ? pauseBtn?.dataset.labelPlay : pauseBtn?.dataset.labelPause;
-    if (label) pauseBtn?.setAttribute('aria-label', label);
-    pauseBtn?.querySelector('.icon-pause')?.classList.toggle('hidden', paused);
-    pauseBtn?.querySelector('.icon-play')?.classList.toggle('hidden', !paused);
-  };
-  if (prefersReducedMotion) setPaused(true);
-  pauseBtn?.addEventListener('click', () => setPaused(swiper.autoplay.running));
+    // WCAG 2.2.2: autoplay must be pausable by the user, and never starts
+    // automatically for reduced-motion users. The button toggles it either way.
+    const pauseBtn = document.getElementById('hero-pause');
+    const setPaused = (paused: boolean) => {
+      if (paused) swiper.autoplay.stop();
+      else swiper.autoplay.start();
+      const label = paused ? pauseBtn?.dataset.labelPlay : pauseBtn?.dataset.labelPause;
+      if (label) pauseBtn?.setAttribute('aria-label', label);
+      pauseBtn?.querySelector('.icon-pause')?.classList.toggle('hidden', paused);
+      pauseBtn?.querySelector('.icon-play')?.classList.toggle('hidden', !paused);
+    };
+    if (prefersReducedMotion) setPaused(true);
+    pauseBtn?.addEventListener('click', () => setPaused(swiper.autoplay.running));
+  }
+
+  const hero = document.querySelector('.hero-swiper');
+  if (hero) {
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(() => void initHeroSwiper(), { timeout: 3000 });
+    } else {
+      setTimeout(() => void initHeroSwiper(), 2000);
+    }
+    for (const type of ['pointerenter', 'touchstart', 'focusin'] as const) {
+      hero.addEventListener(type, () => void initHeroSwiper(), {
+        once: true,
+        passive: true,
+      });
+    }
+  }
 
   // Home "Selected work" category filter
   const tabs = document.querySelectorAll<HTMLButtonElement>('.work-tab');

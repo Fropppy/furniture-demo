@@ -13,7 +13,9 @@ const isGhPages = process.env.DEPLOY_TARGET === 'gh-pages';
 
 // Keystatic's admin routes are server-rendered: they run in `astro dev` out of
 // the box, but a static deploy must exclude them (or ship an SSR adapter and
-// build with ENABLE_KEYSTATIC=1 — see README).
+// build with ENABLE_KEYSTATIC=1 — see README). React rides the same flag: no
+// static page hydrates a component, so unconditional it only ships an orphan
+// client chunk.
 const isDev = process.argv[2] === 'dev';
 const useKeystatic = isDev || process.env.ENABLE_KEYSTATIC === '1';
 
@@ -74,8 +76,7 @@ export default defineConfig({
   },
   integrations: [
     sitemap({ filter: (page) => !page.endsWith('/rss.xml') }),
-    react(),
-    ...(useKeystatic ? [keystatic()] : []),
+    ...(useKeystatic ? [react(), keystatic()] : []),
   ],
   vite: {
     plugins: [tailwindcss()],

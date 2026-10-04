@@ -218,6 +218,14 @@ const posts = collection({
       label: 'SEO meta description override (~150–160 chars)',
       validation: { length: { max: 200 } },
     }),
+    seoTitleVi: fields.text({
+      label: 'SEO title (VI, ≤ 60 chars)',
+      validation: { length: { max: 60 } },
+    }),
+    seoDescriptionVi: fields.text({
+      label: 'SEO meta description (VI, ~150–160 chars)',
+      validation: { length: { max: 200 } },
+    }),
     content: fields.markdoc({
       label: 'Article body',
       extension: 'md',

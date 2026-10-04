@@ -54,7 +54,7 @@ npm run dev                            # dev server :4321, Keystatic at /keystat
 npm run check                          # astro check (types + content schemas)
 npm run build                          # astro check + production build (custom-domain mode)
 DEPLOY_TARGET=gh-pages npm run build   # build for fropppy.github.io/furniture-demo
-ENABLE_KEYSTATIC=1 npm run build       # build WITH Keystatic routes (non-prod only)
+ENABLE_KEYSTATIC=1 npm run build       # build WITH Keystatic routes — needs an SSR adapter installed (see README)
 npm run preview                        # serve dist/
 npm run og                             # regenerate public/og-default.png (after brand changes)
 fuser -k 4321/tcp                      # kill dev server (never `pkill -f "astro dev"` — self-matches)

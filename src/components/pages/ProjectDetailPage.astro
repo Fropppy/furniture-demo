@@ -6,8 +6,7 @@ import Placeholder from '../Placeholder.astro';
 import ProjectCard from '../ProjectCard.astro';
 import { placeholderDataUri } from '../../lib/placeholders';
 import { CATEGORIES, SITE, safeJson, withBase, type Locale } from '../../lib/site';
-import { pick } from '../../lib/i18n';
-import { HTML_LANG, UI } from '../../lib/i18n';
+import { HTML_LANG, UI, pick } from '../../lib/i18n';
 
 interface Props {
   project: CollectionEntry<'projects'>;
@@ -71,7 +70,7 @@ const workSchema = {
 };
 ---
 
-<Base title={locale === 'vi' && data.seoTitleVi?.trim() ? data.seoTitleVi : data.seoTitle ?? title} description={data.seoDescription ?? summary} {locale}>
+<Base title={locale === 'vi' && data.seoTitleVi?.trim() ? data.seoTitleVi : data.seoTitle ?? title} description={pick(locale, data.seoDescription, data.seoDescriptionVi) ?? summary} {locale}>
   <script type="application/ld+json" set:html={safeJson(breadcrumb)} slot="seo" />
   <script type="application/ld+json" set:html={safeJson(workSchema)} slot="seo" />
 

@@ -2,17 +2,9 @@ import { defineCollection } from 'astro:content';
 import { z } from 'astro/zod';
 import { glob } from 'astro/loaders';
 import { STYLE_TAGS } from './lib/site';
+import { SCENES } from './lib/placeholders';
 
-const scenes = z.enum([
-  'living',
-  'bedroom',
-  'kitchen',
-  'dining',
-  'office',
-  'cafe',
-  'lounge',
-  'facade',
-]);
+const scenes = z.enum(SCENES);
 
 // Editor-facing SEO overrides: blank/whitespace values normalize to undefined
 // so the page fallback (title/summary) always wins when the field is empty.

@@ -16,7 +16,7 @@ export type Scene =
   | 'lounge'
   | 'facade';
 
-export const SCENES: Scene[] = [
+export const SCENES = [
   'living',
   'bedroom',
   'kitchen',
@@ -25,7 +25,7 @@ export const SCENES: Scene[] = [
   'cafe',
   'lounge',
   'facade',
-];
+] as const satisfies readonly Scene[];
 
 export function placeholderSvg(scene: Scene, hue: number, uid: string): string {
   const bg1 = `hsl(${hue} 36% 91%)`;

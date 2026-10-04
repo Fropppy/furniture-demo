@@ -28,7 +28,7 @@ The clients wanted a weekend house that would eventually become a retirement hom
 
 ## The concept
 
-We kept the palette close to the landscape — local pine ceilings, terrazzo floors poured on site, and deep eaves that shade the glass through the hot afternoons. Furniture was designed as a family of pieces: a modular sofa, a dining table in solid ash, and joinery wall that conceals services and storage so the rooms stay visually quiet.
+We kept the palette close to the landscape — local pine ceilings, terrazzo floors poured on site, and deep eaves that shade the glass through the hot afternoons. Furniture was designed as a family of pieces: a modular sofa, a dining table in solid ash, and a joinery wall that conceals services and storage so the rooms stay visually quiet.
 
 - Living and dining open fully to the terrace through sliding glass walls
 - The kitchen sits half a level below, keeping it part of the gathering without dominating it

@@ -1,6 +1,6 @@
 ---
 title: Palm Courtyard Homestay
-summary: Eleven key-worker rooms around a shaded courtyard in Hoi An — a homestay built from the town's palette of lime plaster, brick and dark timber.
+summary: Eleven guest rooms around a shaded courtyard in Hoi An — a homestay built from the town's palette of lime plaster, brick and dark timber.
 client: Palm Hospitality
 category: hospitality
 style: Modern Tropical

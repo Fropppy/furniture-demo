@@ -23,7 +23,7 @@ const location = pick(locale, data.location, data.locationVi);
   data-category={data.category}
   data-style={data.style}
   data-band={areaBand(data.area)}
-  data-title={data.title.toLowerCase()}
+  data-title={pick(locale, data.title, data.titleVi).toLowerCase()}
 >
   <a href={href} class="block overflow-hidden rounded-xl bg-cream-100">
     <div class="aspect-[4/3] overflow-hidden">

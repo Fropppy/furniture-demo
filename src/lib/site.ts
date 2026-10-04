@@ -74,8 +74,6 @@ export const CATEGORIES = {
   retail: { en: 'Retail', vi: 'Bán lẻ' },
 } as const;
 
-export type CategoryKey = keyof typeof CATEGORIES;
-
 export const STYLE_TAGS = [
   'Japandi',
   'Modern Tropical',

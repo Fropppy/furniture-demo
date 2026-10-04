@@ -150,6 +150,11 @@ const t = UI[locale];
       return;
     }
 
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return;
+    }
+
     const data = Object.fromEntries(new FormData(form).entries());
 
     submitBtn.disabled = true;

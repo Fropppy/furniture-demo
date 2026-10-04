@@ -3,8 +3,7 @@ import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import PageHeader from '../PageHeader.astro';
 import { formatDate, withBase, type Locale } from '../../lib/site';
-import { pick } from '../../lib/i18n';
-import { UI } from '../../lib/i18n';
+import { UI, pick } from '../../lib/i18n';
 
 interface Props {
   locale: Locale;

@@ -24,7 +24,7 @@ servicesVi: [Thiết kế nội thất, Nội thất theo yêu cầu, Phối h�
 
 ## The brief
 
-Morning had outgrown its first shop and wanted the second location to put craft on display: the roaster, the barists, the beans. The room needed to work hard at peak hour — forty seats, a queue that coils without blocking the street door — while feeling calm enough to stay for a second cup.
+Morning had outgrown its first shop and wanted the second location to put craft on display: the roaster, the baristas, the beans. The room needed to work hard at peak hour — forty seats, a queue that coils without blocking the street door — while feeling calm enough to stay for a second cup.
 
 ## The concept
 
@@ -36,4 +36,4 @@ We organised the plan around a U-shaped bar that lets customers watch every stag
 
 ## The outcome
 
-The café opened to queues in its first week and the communal window table has become the shop's signature — photographed daily, sat-in all day. Foot traffic from the corner junction is up measurably, which the client credits to the facades deep recessed entry.
+The café opened to queues in its first week and the communal window table has become the shop's signature — photographed daily, sat-in all day. Foot traffic from the corner junction is up measurably, which the client credits to the façade's deep recessed entry.

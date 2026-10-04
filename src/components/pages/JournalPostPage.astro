@@ -2,8 +2,7 @@
 import { render, type CollectionEntry } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import { SITE, formatDate, safeJson, withBase, type Locale } from '../../lib/site';
-import { pick } from '../../lib/i18n';
-import { HTML_LANG, UI } from '../../lib/i18n';
+import { HTML_LANG, UI, pick } from '../../lib/i18n';
 
 interface Props {
   post: CollectionEntry<'posts'>;
@@ -33,7 +32,7 @@ const articleSchema = {
 
 <Base
   title={locale === 'vi' && post.data.seoTitleVi?.trim() ? post.data.seoTitleVi : post.data.seoTitle ?? title}
-  description={post.data.seoDescription ?? excerpt}
+  description={pick(locale, post.data.seoDescription, post.data.seoDescriptionVi) ?? excerpt}
   {locale}
 >
   <script
